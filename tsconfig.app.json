@@ -1,0 +1,11 @@
+{
+  "include": ["env.d.ts", "resources/scripts/**/*", "resources/scripts/**/*.vue", "resources/scripts/**/*.json"],
+  "exclude": ["resources/scripts/**/__tests__/*"],
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./resources/scripts/*"]
+    }
+  }
+}
