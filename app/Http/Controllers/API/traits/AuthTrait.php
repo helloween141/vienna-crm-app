@@ -1,0 +1,84 @@
+<?php
+namespace App\Http\Controllers\API\traits;
+
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+trait AuthTrait {
+    /**
+     * Register
+     */
+    public function register(Request $request)
+    {
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            $success = true;
+            $message = 'Вы были успешно зарегистрированы';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $success = false;
+            $message = $ex->getMessage();
+        }
+
+        // response
+        $response = [
+            'success' => $success,
+            'message' => $message,
+        ];
+        return response()->json($response);
+    }
+
+    /**
+     * Login
+     */
+    public function login(Request $request)
+    {
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
+
+        if (Auth::attempt($credentials)) {
+            $success = true;
+            $message = 'Вы были успешно авторизированы';
+        } else {
+            $success = false;
+            $message = 'Вы ввели неверный e-mail или пароль';
+        }
+
+        // response
+        $response = [
+            'success' => $success,
+            'message' => $message,
+        ];
+        return response()->json($response);
+    }
+
+    /**
+     * Logout
+     */
+    public function logout()
+    {
+        try {
+            Session::flush();
+            $success = true;
+            $message = 'Вы успешно вышли';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $success = false;
+            $message = $ex->getMessage();
+        }
+
+        // response
+        $response = [
+            'success' => $success,
+            'message' => $message,
+        ];
+        return response()->json($response);
+    }
+}
