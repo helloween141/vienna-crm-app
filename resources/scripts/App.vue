@@ -28,7 +28,7 @@ export default defineComponent({
     }
 
     return {
-      isAuth: true,
+      isAuth: window.Laravel.isLoggedin,
       onToggleTheme,
       themeStore
     }
