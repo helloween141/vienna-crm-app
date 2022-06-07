@@ -11,7 +11,7 @@ trait AuthTrait {
     /**
      * Register
      */
-    public function register(Request $request)
+    public function register(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $user = new User();
@@ -38,7 +38,7 @@ trait AuthTrait {
     /**
      * Login
      */
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         $credentials = [
             'email' => $request->email,
@@ -46,25 +46,24 @@ trait AuthTrait {
         ];
 
         if (Auth::attempt($credentials)) {
-            $success = true;
-            $message = 'Вы были успешно авторизированы';
-        } else {
-            $success = false;
-            $message = 'Вы ввели неверный e-mail или пароль';
+            $token = Auth::user()->createToken('auth-token')->plainTextToken;
+            return response()->json([
+                'success' => true,
+                'message' => 'Вы были успешно авторизированы',
+                'token' => $token
+            ]);
         }
 
-        // response
-        $response = [
-            'success' => $success,
-            'message' => $message,
-        ];
-        return response()->json($response);
+        return response()->json([
+            'success' => false,
+            'message' => 'Вы ввели неверный e-mail или пароль'
+        ]);
     }
 
     /**
      * Logout
      */
-    public function logout()
+    public function logout(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             Session::flush();
@@ -75,11 +74,11 @@ trait AuthTrait {
             $message = $ex->getMessage();
         }
 
-        // response
         $response = [
             'success' => $success,
             'message' => $message,
         ];
+
         return response()->json($response);
     }
 }

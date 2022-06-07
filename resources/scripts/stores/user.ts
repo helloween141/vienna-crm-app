@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import axios from "axios";
 
 export interface User {
 }
@@ -19,10 +20,20 @@ export const useUserStore = defineStore({
         getUserData: (state) => state.user
     },
     actions: {
-        login() {
-
+        getUser() {
+            return axios.get('api/user').then(({data}) => {
+                this.auth = true
+                this.user = data
+                console.log(data)
+            }).catch(e => {
+                console.log(e)
+            })
         },
         logout() {
+            return axios.post('api/logout').then(() => {
+                this.auth = false
+                this.user = {}
+            })
         }
     }
 })

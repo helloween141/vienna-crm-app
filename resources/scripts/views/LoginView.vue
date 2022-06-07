@@ -43,32 +43,29 @@ import axios from "axios";
 import router from "@/router";
 
 export default defineComponent({
-    name: "AuthView",
+    name: "LoginView",
     setup() {
         const email: Ref<string> = ref('')
         const password: Ref<string> = ref('')
         let error: Ref<string> = ref('')
 
-        const handleSubmit = () => {
-            if (password.value.length > 0) {
-                axios.get('/sanctum/csrf-cookie').then(response => {
-                    axios.post('api/login', {
-                        email: email.value,
-                        password: password.value
-                    }).then(response => {
-                        console.log(response.data)
-                        if (response.data.success) {
-                            // TODO: записать в store
-                            router.push('dashboard')
-                        } else {
-                            error.value = response.data.message
-                        }
-                    }).catch(function (error) {
-                        console.error(error);
-                    });
+        const handleSubmit = async () => {
+            try {
+                await axios.get('/sanctum/csrf-cookie');
+                const response = await axios.post('api/login', {
+                    email: email.value,
+                    password: password.value
                 })
+                if (response.data.success) {
+                    await router.push({name: 'dashboard'})
+                } else {
+                    error.value = response.data.message
+                }
+            } catch(e) {
+                console.error(e)
             }
         }
+
         return {
             email,
             password,
