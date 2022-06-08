@@ -1,17 +1,18 @@
 import {defineStore} from 'pinia'
 
+export interface ThemeState {
+    isDark: boolean | false,
+}
+
 export const useThemeStore = defineStore({
-    id: 'theme',
-    state: () => ({
-        darkTheme: localStorage.getItem('dark-theme') === 'true' || false
+    id: 'themeStore',
+    state: (): ThemeState => ({
+        isDark: localStorage.getItem('dark-theme') === 'true'
     }),
-    getters: {
-        isDark: (state) => state.darkTheme
-    },
     actions: {
         switchTheme() {
-            this.darkTheme = !this.darkTheme
-            localStorage.setItem('dark-theme', (this.darkTheme).toString())
+            this.isDark = !this.isDark
+            localStorage.setItem('dark-theme', (this.isDark).toString())
         }
     }
 })

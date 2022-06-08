@@ -1,8 +1,8 @@
 <template>
     <div :class="{'dark': themeStore.isDark}">
-        <div class="flex flex-col dark:bg-gray-800">
+        <div class="flex flex-col h-screen dark:bg-gray-800">
             <Navbar @on-toggle-theme="onToggleTheme"/>
-            <RouterView class="px-6 mb-10"/>
+            <RouterView class="px-6 py-6 mb-10 flex-grow"/>
             <Copyright/>
             <ModalsContainer/>
         </div>
@@ -15,7 +15,6 @@ import {useThemeStore} from "@/stores/theme";
 import Navbar from "@/components/Navbar.vue";
 import AuthView from "@/views/LoginView.vue";
 import Copyright from "@/components/Copyright.vue";
-import {useUserStore} from "@/stores/user";
 
 export default defineComponent({
     components: {AuthView, Copyright, Navbar},

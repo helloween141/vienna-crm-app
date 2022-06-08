@@ -1,40 +1,29 @@
 <template>
-    <div class="w-full h-full px-5 py-5">
-        <p v-if="error">
-            {{error}}
-        </p>
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="handleSubmit">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-                    Email
-                </label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="email"
-                    type="text"
-                    v-model="email"
-                />
-            </div>
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-                    Пароль
-                </label>
-                <input
-                    class="shadow appearance-none border border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                    id="password"
-                    type="password"
-                    v-model="password"
-                />
-            </div>
-            <div class="flex items-center justify-between">
-                <button
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="submit">
-                    Войти
-                </button>
-            </div>
-        </form>
+  <div>
+    <div class="flex items-center justify-center mb-10">
+      <img src="@/assets/logo.svg" class="mr-3 h-6 sm:h-9" alt="Logo"/>
+      <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Vienna CRM</span>
     </div>
+
+    <div v-if="error" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+      <span class="font-medium">{{ error }}</span>
+    </div>
+    <form class="shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="handleSubmit">
+      <div class="mb-5">
+        <h1 class="text-2xl dark:text-white">Вход</h1>
+      </div>
+
+      <div class="mb-6">
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
+        <input v-model="email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+      </div>
+      <div class="mb-6">
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Пароль</label>
+        <input v-model="password" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+      </div>
+      <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Войти</button>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
@@ -43,36 +32,37 @@ import axios from "axios";
 import router from "@/router";
 
 export default defineComponent({
-    name: "LoginView",
-    setup() {
-        const email: Ref<string> = ref('')
-        const password: Ref<string> = ref('')
-        let error: Ref<string> = ref('')
+  name: "LoginView",
+  setup() {
+    const email: Ref<string> = ref('')
+    const password: Ref<string> = ref('')
+    let error: Ref<string> = ref('')
 
-        const handleSubmit = async () => {
-            try {
-                await axios.get('/sanctum/csrf-cookie');
-                const response = await axios.post('api/login', {
-                    email: email.value,
-                    password: password.value
-                })
-                if (response.data.success) {
-                    await router.push({name: 'dashboard'})
-                } else {
-                    error.value = response.data.message
-                }
-            } catch(e) {
-                console.error(e)
-            }
+    const handleSubmit = async () => {
+      try {
+        await axios.get('/sanctum/csrf-cookie');
+        const response = await axios.post('api/login', {
+          email: email.value,
+          password: password.value
+        })
+        if (response.data.success) {
+          error.value = ''
+          await router.push({name: 'dashboard'})
+        } else {
+          error.value = response.data.message
         }
-
-        return {
-            email,
-            password,
-            error,
-            handleSubmit
-        }
+      } catch (e) {
+        console.error(e)
+      }
     }
+
+    return {
+      email,
+      password,
+      error,
+      handleSubmit
+    }
+  }
 })
 </script>
 

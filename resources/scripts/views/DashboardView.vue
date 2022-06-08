@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5">
+  <div>
     <CurrentTasks />
     <Performance />
   </div>

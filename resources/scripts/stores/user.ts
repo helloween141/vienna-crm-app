@@ -2,6 +2,9 @@ import {defineStore} from 'pinia'
 import axios from "axios";
 
 export interface User {
+    id: number | 0,
+    name: string | '',
+    email: string | ''
 }
 
 export interface UserState {
@@ -10,30 +13,21 @@ export interface UserState {
 }
 
 export const useUserStore = defineStore({
-    id: 'user',
-    state: (): UserState => ({
+    id: 'userStore',
+    state: (): UserState => <UserState>({
         auth: false,
         user: {}
     }),
-    getters: {
-        isAuth: (state) => state.auth,
-        getUserData: (state) => state.user
-    },
     actions: {
-        getUser() {
-            return axios.get('api/user').then(({data}) => {
+        async getUserData() {
+            try {
+                const userInfo = await axios.get('api/user')
                 this.auth = true
-                this.user = data
-                console.log(data)
-            }).catch(e => {
+                this.user = userInfo.data
+            }
+            catch (e) {
                 console.log(e)
-            })
-        },
-        logout() {
-            return axios.post('api/logout').then(() => {
-                this.auth = false
-                this.user = {}
-            })
+            }
         }
     }
 })

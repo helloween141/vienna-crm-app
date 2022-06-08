@@ -11,7 +11,7 @@ trait AuthTrait {
     /**
      * Register
      */
-    public function register(Request $request): \Illuminate\Http\JsonResponse
+    public function create(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $user = new User();
@@ -21,7 +21,7 @@ trait AuthTrait {
             $user->save();
 
             $success = true;
-            $message = 'Вы были успешно зарегистрированы';
+            $message = 'Пользователь успешно создан';
         } catch (\Illuminate\Database\QueryException $ex) {
             $success = false;
             $message = $ex->getMessage();
@@ -46,11 +46,9 @@ trait AuthTrait {
         ];
 
         if (Auth::attempt($credentials)) {
-            $token = Auth::user()->createToken('auth-token')->plainTextToken;
             return response()->json([
                 'success' => true,
-                'message' => 'Вы были успешно авторизированы',
-                'token' => $token
+                'message' => 'Вы были успешно авторизированы'
             ]);
         }
 

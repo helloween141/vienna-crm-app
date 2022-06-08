@@ -44,23 +44,26 @@ const router = createRouter({
     ]
 });
 
-router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title}`
-    const userStore = useUserStore()
-    userStore.getUser().then(() => {
+router.beforeEach(async (to, from, next) => {
+    try {
+        document.title = `${to.meta.title}`
+        const userStore = useUserStore()
+        await userStore.getUserData()
         if (to.meta.middleware === 'guest') {
-            if (userStore.isAuth) {
+            if (userStore.auth) {
                 next({name: 'dashboard'})
             }
             next()
         } else {
-            if (userStore.isAuth) {
+            if (userStore.auth) {
                 next()
             } else {
                 next({name: 'login'})
             }
         }
-    })
+    } catch (e) {
+        console.log(e)
+    }
 })
 
 export default router
