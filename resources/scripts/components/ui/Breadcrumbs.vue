@@ -1,5 +1,5 @@
 <template>
-  <div class="flex py-3 px-5 mb-5 text-gray-700 bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
+  <div class="flex py-3 px-5 text-gray-700 bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumbs">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
       <li class="inline-flex items-center">
         <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 h-full pl-6">
+  <div class="flex-1 h-full pl-6 pt-6">
     <div v-if="loading" class="loading">Загрузка...</div>
     <div v-else>
       <div class="flex mb-5 justify-between items-center">

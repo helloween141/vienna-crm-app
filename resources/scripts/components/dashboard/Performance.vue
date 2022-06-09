@@ -4,7 +4,6 @@
       <div class="mb-5">
         <h1 class="text-2xl dark:text-white">Работы по сотрудникам</h1>
       </div>
-
       <div class="w-full border-t border-gray-200 mb-5"></div>
 
       <div class="flex-col flex-wrap mb-5 justify-between">

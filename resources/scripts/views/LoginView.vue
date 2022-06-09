@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col h-screen justify-center">
     <div class="flex items-center justify-center mb-10">
       <img src="@/assets/logo.svg" class="mr-3 h-6 sm:h-9" alt="Logo"/>
       <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Vienna CRM</span>
@@ -8,7 +8,7 @@
     <div v-if="error" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
       <span class="font-medium">{{ error }}</span>
     </div>
-    <form class="shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="handleSubmit">
+    <form class="shadow-md rounded px-8 pt-6 pb-8  dark:bg-gray-800" @submit.prevent="handleSubmit">
       <div class="mb-5">
         <h1 class="text-2xl dark:text-white">Вход</h1>
       </div>

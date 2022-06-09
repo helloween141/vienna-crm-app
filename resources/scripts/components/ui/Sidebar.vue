@@ -1,5 +1,5 @@
 <template>
-  <aside class="flex-shrink-0 hidden w-1/3 bg-white border-r dark:border-primary-darker dark:bg-gray-800 md:block pr-6" aria-label="Sidebar">
+  <aside class="flex-shrink-0 hidden w-1/3 bg-white border-r dark:border-primary-darker dark:bg-gray-800 md:block pr-6 pt-6" aria-label="Sidebar">
   
     <div class="flex mb-2 justify-between">
       <div>

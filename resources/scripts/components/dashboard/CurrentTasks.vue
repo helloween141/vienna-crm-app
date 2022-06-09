@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="mb-5">
-
       <div class="mb-5">
         <h1 class="text-2xl dark:text-white">Мои обращения</h1>
       </div>
@@ -39,6 +38,7 @@
               class="block w-full md:w-auto p-2 pl-10 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Поиск по обращениям..." v-model="searchString" @input="applySearchFilter" />
           </div>
+
         </div>
       </div>
     </div>
@@ -53,7 +53,6 @@
             <th scope="col" class="px-6 py-3">Тип</th>
             <th scope="col" class="px-6 py-3">Суть обращения</th>
             <th scope="col" class="px-6 py-3">Статус</th>
-            <th scope="col" class="px-6 py-3">Исполнитель</th>
             <th scope="col" class="px-6 py-3">Приоритет</th>
           </tr>
         </thead>
@@ -78,12 +77,6 @@
               <select id="task-statuses"
                 class="block py-2.5 px-0 w-48 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                 <option v-for="(value, name) in taskStatuses" :selected="name === task.status">{{ value }}</option>
-              </select>
-            </td>
-            <td class="px-6 py-4">
-              <select id="users"
-                class="block py-2.5 px-0 w-48 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                <option v-for="user in users" :selected="user.id === task.executorId">{{ user.name }}</option>
               </select>
             </td>
             <td class="px-6 py-4">
