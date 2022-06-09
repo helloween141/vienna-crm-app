@@ -48,6 +48,7 @@ router.beforeEach(async (to, from, next) => {
     try {
         document.title = `${to.meta.title}`
         const userStore = useUserStore()
+
         await userStore.getUserData()
         if (to.meta.middleware === 'guest') {
             if (userStore.auth) {

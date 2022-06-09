@@ -1,7 +1,7 @@
 <template>
   <header v-show="auth">
     <div class="wrapper">
-      <nav class="border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-800 bg-gray-50">
+      <nav class="border-gray-200 px-2 sm:px-4 py-1 dark:bg-gray-700 bg-gray-50">
         <div class="container flex flex-wrap justify-between items-center mx-auto">
 
           <RouterLink to="/" class="flex items-center" aria-current="page">
@@ -116,7 +116,7 @@ export default defineComponent({
         }
 
         const logout = async () => {
-          await axios.post('api/logout')
+          await axios.post('/api/logout')
           userStore.$reset()
           await router.push({name: 'login'})
         }

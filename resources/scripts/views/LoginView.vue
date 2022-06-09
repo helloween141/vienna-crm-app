@@ -41,7 +41,7 @@ export default defineComponent({
     const handleSubmit = async () => {
       try {
         await axios.get('/sanctum/csrf-cookie');
-        const response = await axios.post('api/login', {
+        const response = await axios.post('/api/login', {
           email: email.value,
           password: password.value
         })
