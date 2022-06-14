@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 class Task extends Model
 {
@@ -17,12 +16,12 @@ class Task extends Model
         'deadline_at' => 'datetime:d.m.Y H:i',
     ];
 
-    public function client()
+    public function client(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Client::class, 'id', 'client_id');
     }
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
