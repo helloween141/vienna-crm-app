@@ -15,7 +15,7 @@ class TaskControllerTest extends TestCase
         Sanctum::actingAs($user);
 
         Task::factory(3)->for($user)->create();
-        $response = $this->get('/api/tasks/active/?user_id=' . $user->id);
+        $response = $this->get('/api/core/sidebar/');
         $response->assertOk();
 
         $this->assertCount(3, $response->json('data'));

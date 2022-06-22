@@ -16,9 +16,9 @@ class TaskUserTimeFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
-            'task_id' => Task::factory(),
-            'time' => $this->faker->numberBetween(15, 200),
+            'user_id' => User::all()->random()->id,
+            'task_id' => Task::all()->random()->id,
+            'time' => $this->faker->numberBetween(15, 960),
         ];
     }
 }

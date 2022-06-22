@@ -17,17 +17,7 @@ class UserController extends Controller
 
     public function getAll(Request $request): AnonymousResourceCollection
     {
-        $filterExecutor = $request->input('executor', false);
-
-        $query = User::query();
-
-        if ($filterExecutor) {
-            $query->where('executor', true);
-        }
-
-        $users = $query->orderBy('name', 'DESC')->get();
-
-        return UserResource::collection($users);
+        return UserResource::collection(User::getExecutors());
     }
 
 }

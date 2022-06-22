@@ -16,37 +16,51 @@ class DashboardController extends Controller
     {
         $currentDate = Carbon::now();
         $currentYear = $currentDate->year;
+        $currentDayStart = $currentDate->startOfMonth()->toDateString();
         $currentDayEnd = $currentDate->endOfMonth()->toDateString();
 
-        $previousDate = Carbon::now()->subMonthsNoOverflow();
-        $previousYear = $previousDate->year;
-        $previousDayEnd = $previousDate->endOfMonth()->toDateString();
+        $lastDate = Carbon::now()->subMonthsNoOverflow();
+        $lastYear = $lastDate->year;
+        $lastDayStart = $lastDate->startOfMonth()->toDateString();
+        $lastDayEnd = $lastDate->endOfMonth()->toDateString();
 
-        $usersTime = User::all()->map(function ($user) use ($previousDayEnd, $currentDayEnd, $previousYear, $currentYear) {
-            $currentMonthTime = Task::getUserCurrentMonthTime($user, $currentYear, [1, $currentDayEnd]);
-            $previousMonthTime = Task::getUserCurrentMonthTime($user, $previousYear, [1, $previousDayEnd]);
+        $beforeLastDate = Carbon::now()->subMonthsNoOverflow(2);
+        $beforeLastYear = $lastDate->year;
+        $beforeLastDayStart = $lastDate->startOfMonth()->toDateString();
+        $beforeLastDayEnd = $lastDate->endOfMonth()->toDateString();
 
-            return [
-                'id' => $user->id,
-                'name' => $user->name,
-                'current_time' => round((int)$currentMonthTime / 60),
-                'last_time' => round((int)$previousMonthTime / 60),
-                'before_last_time' => round((int)$previousMonthTime / 60)
-            ];
-        })->toArray();
+        // TODO: skip 0 or to resource
+        $usersTime = User::getExecutors()
+            ->map(function ($user) use (
+                $lastDayStart, $beforeLastDayStart,
+                $currentDayStart, $beforeLastDayEnd, $beforeLastYear,
+                $lastDayEnd, $currentDayEnd, $lastYear, $currentYear
+            ) {
+                $currentMonthTime = Task::getUserMonthTime($user, $currentYear, [$currentDayStart, $currentDayEnd]);
+                $lastMonthTime = Task::getUserMonthTime($user, $lastYear, [$lastDayStart, $lastDayEnd]);
+                $beforeLastMonthTime = Task::getUserMonthTime($user, $beforeLastYear, [$beforeLastDayStart, $beforeLastDayEnd]);
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'current_time' => $currentMonthTime,
+                    'last_time' => $lastMonthTime,
+                    'before_last_time' => $beforeLastMonthTime
+                ];
+            })->toArray();
 
         return [
             'month_norm' => 132,
             'today_norm' => 16,
             'months' => [
-                $currentDate->monthName,
-                $previousDate->monthName
+                $lastDate->monthName,
+                $beforeLastDate->monthName
             ],
             'users' => $usersTime
         ];
     }
 
-    public function getActive(Request $request): AnonymousResourceCollection
+    public function getActiveTasks(Request $request): AnonymousResourceCollection
     {
         $userId = (int)$request->input('user_id');
 

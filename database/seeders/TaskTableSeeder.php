@@ -11,10 +11,6 @@ class TaskTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('tasks')->truncate();
-
-        $user = User::whereEmail('admin@test.ru')->first();
-
-        Task::factory(5)->for($user)->create();
+        Task::factory(20)->create();
     }
 }

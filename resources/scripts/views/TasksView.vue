@@ -3,7 +3,7 @@
   <div class="flex px-6">
     <Sidebar
         :title="sidebarTitle"
-        :url="sidebarDataUrl"
+        :model="sidebarModel"
     />
     <Content />
   </div>
@@ -22,7 +22,7 @@ export default defineComponent({
   data() {
     return {
       sidebarTitle: 'Обращения',
-      sidebarDataUrl: 'tasks'
+      sidebarModel: 'Task'
     }
   },
 })

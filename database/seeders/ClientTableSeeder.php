@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Client;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -9,6 +10,6 @@ class ClientTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('clients')->truncate();
+        Client::factory(5)->create();
     }
 }

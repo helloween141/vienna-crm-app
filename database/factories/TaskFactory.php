@@ -16,9 +16,9 @@ class TaskFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
-            'executor_id' => User::factory(),
-            'client_id' => Client::factory(),
+            'user_id' => User::all()->random()->id,
+            'executor_id' => User::all()->random()->id,
+            'client_id' => Client::all()->random()->id,
             'short_description' => $this->faker->text(50),
             'full_description' => $this->faker->text(150),
             'type' => $this->faker->randomElement([
@@ -26,12 +26,11 @@ class TaskFactory extends Factory
                 'configure', 'warranty', 'other'
             ]),
             'status' => $this->faker->randomElement([
-                'new', 'progess', 'complete', 'waiting_answer', 'waiting_payment',
+                'new', 'progress', 'complete', 'waiting_answer', 'waiting_payment',
                 'additional', 'cancel'
             ]),
             'priority' => $this->faker->randomElement(['low', 'middle', 'high']),
-            'deadline_at' => $this->faker->dateTime,
-            'finished_at' => $this->faker->dateTime,
+            'finished_at' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
             'executor_time' => $this->faker->numberBetween(15, 200),
         ];
     }

@@ -2,14 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\TaskUserTime;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class TaskUserTimeTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('task_user_times')->truncate();
-        //\App\Models\TaskUserTime::factory(10)->create();
+        TaskUserTime::factory(20)->create();
     }
 }

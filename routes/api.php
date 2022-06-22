@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\TaskController;
+use App\Http\Controllers\API\CoreController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,11 +21,14 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth:sanctum'], function () 
     Route::get('/', [UserController::class, 'getAll']);
 });
 
-Route::group(['prefix' => 'tasks', 'middleware' => 'auth:sanctum'], function () {
-    Route::get('/', [TaskController::class, 'getByFilter']);
-});
-
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function () {
     Route::get('statistics', [DashboardController::class, 'getStatistic']);
-    Route::get('active-tasks', [DashboardController::class, 'getActive']);
+    Route::get('active-tasks', [DashboardController::class, 'getActiveTasks']);
+});
+
+Route::group(['prefix' => 'core', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/sidebar/{model}', [CoreController::class, 'getSidebar']);
+    Route::get('/record/{model}/{recordId}', [CoreController::class, 'getData']);
+    Route::get('/record/{model}', [CoreController::class, 'getInterface']);
+    Route::post('/record/{model}/{recordId?}', [CoreController::class, 'save']);
 });

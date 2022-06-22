@@ -68,7 +68,7 @@ export default defineComponent({
   },
   props: {
     title: String,
-    url: String
+    model: String
   },
   created() {
     this.$watch(
@@ -84,7 +84,7 @@ export default defineComponent({
   methods: {
     async fetchData() {
       try {
-        const result = await axios.get(`/api/${this.url}/`, {
+        const result = await axios.get(`/api/core/sidebar/${this.model}`, {
           params: {
             'page': this.$route.query.page || 1
           }

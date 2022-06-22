@@ -11,6 +11,7 @@ class UserFactory extends Factory
      * Define the model's default state.
      *
      * @return array
+     * @throws \Exception
      */
     public function definition()
     {
@@ -20,6 +21,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => bcrypt('123'),
             'remember_token' => Str::random(10),
+            'executor' => rand(0, 1) < 0.5
         ];
     }
 

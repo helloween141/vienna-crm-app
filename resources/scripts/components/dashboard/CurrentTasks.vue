@@ -75,19 +75,13 @@
               <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">{{ task.client.name }}</a>
             </td>
             <td class="px-6 py-4">
-              <select id="task-types"
-                      class="block py-2.5 px-0 w-48 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                <option v-for="(value, name) in taskTypes" :selected="name === task.type">{{ value }}</option>
-              </select>
+              {{ taskTypes[task.type] }}
             </td>
             <td class="px-6 py-4">
               {{ task.short_description }}
             </td>
             <td class="px-6 py-4">
-              <select id="task-statuses"
-                      class="block py-2.5 px-0 w-48 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                <option v-for="(value, name) in taskStatuses" :selected="name === task.status">{{ value }}</option>
-              </select>
+              {{ taskStatuses[task.status] }}
             </td>
             <td class="px-6 py-4">
               <span v-if="task.priority === 'high'" class="text-red-500">Высокий</span>
