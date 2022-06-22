@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -16,14 +17,14 @@ class Task extends Model
         'deadline_at' => 'datetime:d.m.Y H:i',
     ];
 
-    public function client(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function client(): BelongsTo
     {
-        return $this->hasOne(Client::class, 'id', 'client_id');
+        return $this->belongsTo(Client::class);
     }
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     /**

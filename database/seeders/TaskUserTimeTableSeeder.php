@@ -10,6 +10,6 @@ class TaskUserTimeTableSeeder extends Seeder
     public function run()
     {
         DB::table('task_user_times')->truncate();
-        \App\Models\TaskUserTime::factory(10)->create();
+        //\App\Models\TaskUserTime::factory(10)->create();
     }
 }

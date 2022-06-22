@@ -9,7 +9,7 @@ export interface User {
 
 export interface UserState {
     auth: boolean | false,
-    user: User | {}
+    user: User
 }
 
 export const useUserStore = defineStore({

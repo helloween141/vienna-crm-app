@@ -1,6 +1,8 @@
 <template>
-  <div class="flex-1 h-full pl-6 pt-6">
-    <div v-if="loading" class="loading">Загрузка...</div>
+  <div class="flex-1 h-full pl-5 pt-5">
+    <div v-if="loading">
+      <Spinner />
+    </div>
     <div v-else>
       <div class="flex mb-5 justify-between items-center">
         <h1 v-if="!formValues" class="text-2xl dark:text-white">Новое обращение</h1>
@@ -18,8 +20,6 @@
           Выключить таймер
         </button>
       </div>
-
-      <div class="w-full border-t border-gray-200 mb-5"></div>
 
       <div class="relative overflow-x-auto">
         <form @submit.prevent="onSaveTask">
@@ -94,9 +94,11 @@ import {defineComponent} from "vue"
 import formInterface from "@/data/mock/task-interface.json"
 import tasks from "@/data/mock/tasks.json"
 import {useToast} from "vue-toastification"
+import Spinner from "@/components/Spinner.vue";
 
 export default defineComponent({
   name: "Content",
+  components: {Spinner},
   data() {
     return {
       startTimer: false,
@@ -107,15 +109,14 @@ export default defineComponent({
     }
   },
   created() {
-    // TODO: get task data from backend
     this.$watch(
         () => this.$route.params,
         () => {
           this.fetchData()
         },
-        // fetch the data when the view is created and the data is
-        // already being observed
-        {immediate: true}
+        {
+          immediate: true
+        }
     )
   },
   methods: {

@@ -10,6 +10,5 @@ class ClientTableSeeder extends Seeder
     public function run()
     {
         DB::table('clients')->truncate();
-        \App\Models\Client::factory(3)->create();
     }
 }

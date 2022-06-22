@@ -8,7 +8,7 @@
     <!-- Scripts and CSS import -->
     @vite
 </head>
-<body>
+<body class="dark:bg-gray-900">
 <div id="app"></div>
 </body>
 </html>

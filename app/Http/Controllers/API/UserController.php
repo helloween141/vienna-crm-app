@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\traits\AuthTrait;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
@@ -12,18 +15,19 @@ class UserController extends Controller
 {
     use AuthTrait;
 
-    public function getAll(): array
+    public function getAll(Request $request): AnonymousResourceCollection
     {
-        return User::all();
-    }
+        $filterExecutor = $request->input('executor', false);
 
-    public function getActiveTasks(): Collection
-    {
-        $user = Auth::user();
+        $query = User::query();
 
-        return $user->tasks([
-            'active' => true
-        ]);
+        if ($filterExecutor) {
+            $query->where('executor', true);
+        }
+
+        $users = $query->orderBy('name', 'DESC')->get();
+
+        return UserResource::collection($users);
     }
 
 }

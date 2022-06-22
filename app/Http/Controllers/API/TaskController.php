@@ -3,15 +3,28 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
+use App\Http\Resources\TaskSidebarResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TaskController extends Controller
 {
-    public function index(): array
+    private array $additionalData = [
+        'headers' => [
+            'Номер', 'Дата', 'Суть обращения'
+        ]
+    ];
+
+    private int $perPage = 3;
+
+    public function getByFilter(Request $request): AnonymousResourceCollection
     {
-        $tasks = Task::with('client')->get();
-        return array_reverse($tasks->toArray());
+        $tasks = Task::query()
+            ->orderBy('id', 'DESC')
+            ->paginate($this->perPage);
+
+        return TaskSidebarResource::collection($tasks)
+            ->additional($this->additionalData);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -10,6 +12,9 @@ class TaskTableSeeder extends Seeder
     public function run()
     {
         DB::table('tasks')->truncate();
-        \App\Models\Task::factory(3)->create();
+
+        $user = User::whereEmail('admin@test.ru')->first();
+
+        Task::factory(5)->for($user)->create();
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 
 trait AuthTrait {
     /**
-     * Register
+     * Create
      */
     public function create(Request $request): \Illuminate\Http\JsonResponse
     {

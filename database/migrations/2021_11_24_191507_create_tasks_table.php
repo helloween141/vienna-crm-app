@@ -17,17 +17,19 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->foreignId('executor_id');
             $table->foreignId('client_id');
-            $table->text('description');
-            $table->text('comment');
+            $table->text('short_description');
+            $table->text('full_description');
+            $table->string('type');
             $table->string('status');
             $table->string('priority');
-            $table->text('tech_comment');
-            $table->text('client_comment');
+            $table->text('tech_comment')->nullable();
+            $table->text('client_comment')->nullable();
             $table->integer('executor_time');
+            $table->timestamps();
             $table->timestamp('deadline_at');
             $table->timestamp('finished_at');
-            $table->timestamps();
         });
     }
 

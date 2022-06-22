@@ -38,7 +38,8 @@ const router = createRouter({
             component: () => import('../views/TasksView.vue'),
             meta: {
                 middleware: 'auth',
-                title: 'Обращения'
+                title: 'Обращения',
+                detailUrl: 'task'
             }
         }
     ]
