@@ -37,13 +37,15 @@ class CoreController extends Controller
 
     public function getData(Request $request, String $modelName = '', Int $recordId = 0) {
         $model = $this->getModel($modelName);
-        $resource = $this->getResource($modelName);
+        $resource = $this->getResource($modelName . 'Resource');
 
         if (!class_exists($model) || !class_exists($resource)) {
             return null;
         }
 
-        $data = $model::query()->find($recordId)->first();
+        $data = $model::query()
+            ->where('id', $recordId)
+            ->get();
 
         return $resource::collection($data);
     }

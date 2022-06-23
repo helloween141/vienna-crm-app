@@ -1,12 +1,12 @@
 <template>
   <div class="flex-1 h-full pl-5 pt-5">
     <div v-if="loading">
-      <Spinner />
+      <Spinner/>
     </div>
     <div v-else>
       <div class="flex mb-5 justify-between items-center">
         <h1 v-if="!formValues" class="text-2xl dark:text-white">Новое обращение</h1>
-        <h1 v-else class="text-2xl dark:text-white">Обращение {{ formValues.id }}</h1>
+        <h1 v-else class="text-2xl dark:text-white">{{ title }} {{ formValues.id }}</h1>
         <button
             v-if="!startTimer"
             @click="onChangeTimerState"
@@ -20,9 +20,8 @@
           Выключить таймер
         </button>
       </div>
-
       <div class="relative overflow-x-auto">
-        <form @submit.prevent="onSaveTask">
+        <form @submit.prevent="onSave">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <tbody>
             <tr
@@ -92,9 +91,9 @@
 <script lang="ts">
 import {defineComponent} from "vue"
 import formInterface from "@/data/mock/task-interface.json"
-import tasks from "@/data/mock/tasks.json"
 import {useToast} from "vue-toastification"
 import Spinner from "@/components/Spinner.vue";
+import axios from "axios";
 
 export default defineComponent({
   name: "Content",
@@ -108,11 +107,15 @@ export default defineComponent({
       formValues: {}
     }
   },
-  created() {
+  props: {
+    title: String,
+    model: String
+  },
+  async mounted() {
     this.$watch(
         () => this.$route.params,
-        () => {
-          this.fetchData()
+        async () => {
+          await this.fetchData()
         },
         {
           immediate: true
@@ -120,20 +123,28 @@ export default defineComponent({
     )
   },
   methods: {
-    fetchData() {
-      this.formInterface = this.formValues = {}
-
-      this.loading = true;
-      setTimeout(() => {
+    async fetchData() {
+      try {
+        this.loading = true;
         this.formInterface = {...this.formInterface, ...formInterface}
-        this.formValues = tasks.find(task => (task.id).toString() === this.$route.params.id) || {}
-        this.loading = false;
-      }, 1000)
+
+        const recordId = this.$route.params.id
+        if (recordId) {
+          const result = await axios.get(`/api/core/${this.model}/${this.$route.params.id}`)
+          this.formValues = result.data.data[0]
+          this.loading = false;
+          console.log(this.formValues)
+        } else {
+          this.loading = false;
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
     onChangeTimerState() {
       this.startTimer = !this.startTimer
     },
-    onSaveTask() {
+    onSave() {
       this.toast.success("Задача успешно сохранена", {
         timeout: 3000
       });

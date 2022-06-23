@@ -17,6 +17,8 @@ class UserControllerTest extends TestCase
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
+        $user->delete();
+
         $response = $this->get('/api/user');
 
         $response->assertOk();

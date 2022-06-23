@@ -3,9 +3,12 @@
   <div class="flex px-6">
     <Sidebar
         :title="sidebarTitle"
-        :model="sidebarModel"
+        :model="model"
     />
-    <Content />
+    <Content
+        :title="contentTitle"
+        :model="model"
+    />
   </div>
 </template>
 
@@ -22,7 +25,8 @@ export default defineComponent({
   data() {
     return {
       sidebarTitle: 'Обращения',
-      sidebarModel: 'Task'
+      model: 'task',
+      contentTitle: 'Обращение'
     }
   },
 })

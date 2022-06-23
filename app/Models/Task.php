@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected static array $sidebarAdditionalData = [
+    public static array $sidebarAdditionalData = [
         'headers' => [
             'Номер', 'Дата', 'Суть обращения'
         ]
@@ -41,19 +42,30 @@ class Task extends Model
 
     /**
      * @param User $user
-     * @return int|mixed
+     * @param int $year
+     * @param array $daysPeriod
+     * @return int Получить суммарное время выполнения задач за месяц (в минутах)
      * Получить суммарное время выполнения задач за месяц (в минутах)
      */
     public static function getUserMonthTime(User $user, int $year, array $daysPeriod): int
     {
         // TODO: Учитывать участие в других задачах
-        $summaryTime = static::query()
+        $totalTime = static::query()
             ->where('user_id', '=', $user->id)
             ->whereYear('finished_at', '=', $year)
             ->whereBetween('finished_at', $daysPeriod)
             ->sum('executor_time');
 
-        // TODO: h and m
-        return round($summaryTime / 60);
+        return $totalTime;
+    }
+
+    public static function getActiveForUser(int $userId): Collection|array
+    {
+        return self::query()
+            ->with('client')
+            ->where('status', '<>', 'complete')
+            ->where('user_id', $userId)
+            ->orderBy('id', 'DESC')
+            ->get();
     }
 }

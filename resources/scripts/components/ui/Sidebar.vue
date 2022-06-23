@@ -70,21 +70,13 @@ export default defineComponent({
     title: String,
     model: String
   },
-  created() {
-    this.$watch(
-        () => this.$route.params,
-        async () => {
-          await this.fetchData()
-        },
-        {
-          immediate: true
-        }
-    )
+  async mounted() {
+    await this.fetchData()
   },
   methods: {
     async fetchData() {
       try {
-        const result = await axios.get(`/api/core/sidebar/${this.model}`, {
+        const result = await axios.get(`/api/core/${this.model}/sidebar/`, {
           params: {
             'page': this.$route.query.page || 1
           }
