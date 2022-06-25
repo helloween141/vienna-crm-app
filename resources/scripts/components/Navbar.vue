@@ -1,5 +1,5 @@
 <template>
-  <header v-show="auth">
+  <header v-show="userStore.auth">
     <div class="wrapper">
       <nav class="border-gray-200 px-2 sm:px-4 py-1 dark:bg-gray-700 bg-gray-50">
         <div class="container flex flex-wrap justify-between items-center mx-auto">
@@ -22,8 +22,8 @@
             </button>
 
             <div class="hidden py-3 px-4 md:inline-block">
-              <span class="block text-sm text-gray-900 dark:text-white">{{ user.name }}</span>
-              <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">{{ user.email }}</span>
+              <span class="block text-sm text-gray-900 dark:text-white">{{ userStore.user.name }}</span>
+              <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">{{ userStore.user.email }}</span>
             </div>
 
             <!-- Dropdown menu -->
@@ -67,13 +67,13 @@
               <div class="w-12 h-6 transition rounded-full outline-none bg-gray-100 dark:bg-gray-500"></div>
               <div
                   class="absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-150 transform scale-110 rounded-full shadow-sm translate-x-0 -translate-y-px bg-white text-primary-dark"
-                  :class="{ 'translate-x-0 -translate-y-px  bg-white text-primary-dark': !isDark, 'translate-x-6 text-primary-100 bg-primary-darker': isDark }">
-                <svg v-show="!isDark" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  :class="{ 'translate-x-0 -translate-y-px  bg-white text-primary-dark': !themeStore.isDark, 'translate-x-6 text-primary-100 bg-primary-darker': themeStore.isDark }">
+                <svg v-show="!themeStore.isDark" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                 </svg>
-                <svg v-show="isDark" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                <svg v-show="themeStore.isDark" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor" style="display: none;">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
@@ -82,7 +82,7 @@
             </button>
           </div>
 
-          <div v-show="auth" class="hidden justify-between items-center w-full md:flex md:w-auto md:order-1"
+          <div v-show="userStore.auth" class="hidden justify-between items-center w-full md:flex md:w-auto md:order-1"
                id="mobile-menu-2">
             <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
               <li>
@@ -146,30 +146,30 @@ import axios from "axios";
 
 export default defineComponent({
   name: 'Navbar',
-  emits: ['on-toggle-theme'],
-  setup: (props, {emit}) => {
-    const userStore = useUserStore()
-    const {user, auth} = storeToRefs(userStore)
-    const {isDark} = storeToRefs(useThemeStore())
-
-    const onToggle = (): void => {
-      emit('on-toggle-theme')
-    }
-
-    const logout = async () => {
-      await axios.post('/api/logout')
-      userStore.$reset()
-      await router.push({name: 'login'})
-    }
-
+  data() {
     return {
-      isDark,
-      user,
-      auth,
-      onToggle,
-      logout
+      userStore: {},
+      themeStore: {}
     }
   },
+  created() {
+    this.userStore = useUserStore()
+    this.themeStore = useThemeStore()
+  },
+  methods: {
+    onToggle() {
+      this.$emit('on-toggle-theme')
+    },
+    async logout() {
+      try {
+        await axios.post('/api/logout')
+        this.userStore.$reset()
+        await router.push({name: 'login'})
+      } catch (error) {
+        console.error(error)
+      }
+    },
+  }
 })
 </script>
 

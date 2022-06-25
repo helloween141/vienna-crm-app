@@ -2,28 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Base\TaskBase;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Task extends Model
+class Task extends TaskBase
 {
     use HasFactory;
-
-    public static array $sidebarAdditionalData = [
-        'headers' => [
-            'Номер', 'Дата', 'Суть обращения'
-        ]
-    ];
-
-    protected $casts = [
-        'created_at' => 'datetime:d.m.Y H:i',
-        'updated_at' => 'datetime:d.m.Y H:i',
-        'finished_at' => 'datetime:d.m.Y H:i',
-        'deadline_at' => 'datetime:d.m.Y H:i',
-    ];
 
     public function client(): BelongsTo
     {
@@ -50,22 +38,18 @@ class Task extends Model
     public static function getUserMonthTime(User $user, int $year, array $daysPeriod): int
     {
         // TODO: Учитывать участие в других задачах
-        $totalTime = static::query()
+        return static::query()
             ->where('user_id', '=', $user->id)
             ->whereYear('finished_at', '=', $year)
             ->whereBetween('finished_at', $daysPeriod)
             ->sum('executor_time');
-
-        return $totalTime;
     }
 
-    public static function getActiveForUser(int $userId): Collection|array
+    public static function getActiveForUser(int $userId): Builder
     {
         return self::query()
             ->with('client')
             ->where('status', '<>', 'complete')
-            ->where('user_id', $userId)
-            ->orderBy('id', 'DESC')
-            ->get();
+            ->where('user_id', $userId);
     }
 }

@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     use AuthTrait;
 
-    public function getAll(Request $request): AnonymousResourceCollection
+    public function getExecutors(Request $request): AnonymousResourceCollection
     {
         return UserResource::collection(User::getExecutors());
     }

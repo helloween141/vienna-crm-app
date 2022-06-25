@@ -120,7 +120,7 @@ export default defineComponent({
         this.loading = false
         console.log(this.performances)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
     async applyFilter() {

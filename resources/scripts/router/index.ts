@@ -29,7 +29,19 @@ const router = createRouter({
             component: () => import('../views/TasksView.vue'),
             meta: {
                 middleware: 'auth',
-                title: 'Обращение'
+                title: 'Обращение',
+                breadCrumb(route) {
+                    const paramTaskId = route.params.id
+                    return [
+                        {
+                            text: 'Обращения',
+                            link: '/tasks/'
+                        },
+                        {
+                            text: paramTaskId,
+                        }
+                    ]
+                }
             }
         },
         {
@@ -39,7 +51,16 @@ const router = createRouter({
             meta: {
                 middleware: 'auth',
                 title: 'Обращения',
-                detailUrl: 'task'
+                detailUrl: 'task',
+                breadCrumb() {
+                    return [
+                        {
+                            text: 'Обращения',
+                            link: '/tasks/'
+                        }
+                    ]
+                }
+
             }
         }
     ]

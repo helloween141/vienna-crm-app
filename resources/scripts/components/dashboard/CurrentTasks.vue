@@ -141,7 +141,7 @@ export default defineComponent({
     async fetchData() {
       try {
         this.loading = true
-        const resultExecutors = await axios.get('/api/users/', {
+        const resultExecutors = await axios.get('/api/users/executors/', {
           params: {
             'executor': true
           }
@@ -156,7 +156,7 @@ export default defineComponent({
         this.tasks = this.currentTasks = resultTasks.data.data
         this.loading = false
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
     applySearchFilter() {

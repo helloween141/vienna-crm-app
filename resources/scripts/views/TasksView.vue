@@ -6,7 +6,6 @@
         :model="model"
     />
     <Content
-        :title="contentTitle"
         :model="model"
     />
   </div>
@@ -26,7 +25,6 @@ export default defineComponent({
     return {
       sidebarTitle: 'Обращения',
       model: 'task',
-      contentTitle: 'Обращение'
     }
   },
 })

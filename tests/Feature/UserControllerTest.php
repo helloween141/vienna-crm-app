@@ -9,26 +9,28 @@ use Tests\TestCase;
 class UserControllerTest extends TestCase
 {
     /**
-     * A basic feature test example.
-     *
      * @return void
+     * Проверить успешную авторизации пользователя
      */
     public function testUserSignIn(): void
     {
-        $user = User::factory()->create();
+        $user = User::all()->random();
         Sanctum::actingAs($user);
-        $user->delete();
 
-        $response = $this->get('/api/user');
-
+        $response = $this->get('/api/user/');
         $response->assertOk();
     }
 
+    /**
+     * @return void
+     * Проверить получение исполнителей
+     */
     public function testGetExecutors(): void
     {
-        $user = User::factory()->create();
-        $response = $this->get('/api/users/get-all?only_executor=' . true);
+        $user = User::all()->random();
+        Sanctum::actingAs($user);
 
+        $response = $this->get('/api/users/executors/');
         $response->assertOk();
     }
 }

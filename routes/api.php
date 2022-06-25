@@ -18,7 +18,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function () {
 });
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth:sanctum'], function () {
-    Route::get('/', [UserController::class, 'getAll']);
+    Route::get('executors', [UserController::class, 'getExecutors']);
 });
 
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function () {
@@ -28,7 +28,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function
 
 Route::group(['prefix' => 'core', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/{model}/sidebar/', [CoreController::class, 'getSidebar']);
-    Route::get('/{model}/{recordId}', [CoreController::class, 'getData']);
     Route::get('/{model}/interface/', [CoreController::class, 'getInterface']);
-    Route::post('/{model}/{recordId}/save/', [CoreController::class, 'save']);
+    Route::get('/{model}/{recordId}/', [CoreController::class, 'getData']);
+    Route::post('/{model}/{recordId}/save/', [CoreController::class, 'onSave']);
 });

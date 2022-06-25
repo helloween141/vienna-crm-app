@@ -31,8 +31,19 @@ class CoreController extends Controller
             ->additional($model::$sidebarAdditionalData ?? []);
     }
 
-    public function getInterface(Request $request, String $modelName = '') {
-        // TODO
+    public function getInterface(Request $request, String $modelName = ''): mixed
+    {
+        $model = $this->getModel($modelName);
+
+        if (!class_exists($model)) {
+            return null;
+        }
+
+        return [
+            'fields' => $model::$fields,
+            'single_name' => $model::$singleName,
+            'accusative_name' => $model::$accusativeName
+        ];
     }
 
     public function getData(Request $request, String $modelName = '', Int $recordId = 0) {
@@ -50,7 +61,7 @@ class CoreController extends Controller
         return $resource::collection($data);
     }
 
-    public function save(Request $request, String $modelName = '', Int $recordId = 0) {
+    public function onSave(Request $request, String $modelName = '', Int $recordId = 0) {
         // TODO: create/update
     }
 

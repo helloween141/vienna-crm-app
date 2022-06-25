@@ -76,7 +76,9 @@ class DashboardController extends Controller
     public function getActiveTasks(Request $request): AnonymousResourceCollection
     {
         $userId = (int)$request->input('user_id');
-        $tasks = Task::getActiveForUser($userId);
+        $tasks = Task::getActiveForUser($userId)
+            ->orderBy('id', 'DESC')
+            ->get();;
 
         return TaskResource::collection($tasks);
     }

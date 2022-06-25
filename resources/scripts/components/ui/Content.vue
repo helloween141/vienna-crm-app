@@ -5,8 +5,8 @@
     </div>
     <div v-else>
       <div class="flex mb-5 justify-between items-center">
-        <h1 v-if="!formValues" class="text-2xl dark:text-white">Новое обращение</h1>
-        <h1 v-else class="text-2xl dark:text-white">{{ title }} {{ formValues.id }}</h1>
+        <h1 v-if="!formValues.id" class="text-2xl dark:text-white">Создать {{formInterface.accusative_name}}</h1>
+        <h1 v-else class="text-2xl dark:text-white">{{ formInterface.single_name }} {{ formValues.id }}</h1>
         <button
             v-if="!startTimer"
             @click="onChangeTimerState"
@@ -34,7 +34,7 @@
               </th>
               <td class="px-6 py-4 w-1/2">
                 <input
-                    v-if="field.type === 'string'"
+                    v-if="field.type === 'string' || field.type === 'int'"
                     type="text"
                     name="{{field.name}}"
                     :v-model="formValues[field.name]"
@@ -66,7 +66,7 @@
                 </select>
 
                 <input
-                    v-if="field.type === 'date'"
+                    v-if="field.type === 'datetime'"
                     class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-1/2 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                     type="text"
                     name="{{field.name}}"
@@ -90,7 +90,6 @@
 
 <script lang="ts">
 import {defineComponent} from "vue"
-import formInterface from "@/data/mock/task-interface.json"
 import {useToast} from "vue-toastification"
 import Spinner from "@/components/Spinner.vue";
 import axios from "axios";
@@ -108,7 +107,6 @@ export default defineComponent({
     }
   },
   props: {
-    title: String,
     model: String
   },
   async mounted() {
@@ -126,26 +124,30 @@ export default defineComponent({
     async fetchData() {
       try {
         this.loading = true;
-        this.formInterface = {...this.formInterface, ...formInterface}
+        //this.formInterface = {...this.formInterface, ...formInterface}
 
         const recordId = this.$route.params.id
+        const resultInterface = await axios.get(`/api/core/${this.model}/interface/`)
+        this.formInterface = resultInterface.data
+        console.log(this.formInterface)
+
         if (recordId) {
-          const result = await axios.get(`/api/core/${this.model}/${this.$route.params.id}`)
-          this.formValues = result.data.data[0]
+          const resultData = await axios.get(`/api/core/${this.model}/${this.$route.params.id}/`)
+          this.formValues = resultData.data.data[0]
           this.loading = false;
           console.log(this.formValues)
         } else {
           this.loading = false;
         }
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
     onChangeTimerState() {
       this.startTimer = !this.startTimer
     },
     onSave() {
-      this.toast.success("Задача успешно сохранена", {
+      this.toast.success("Данные сохранены!", {
         timeout: 3000
       });
     }

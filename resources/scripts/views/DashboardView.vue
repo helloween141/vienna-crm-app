@@ -5,7 +5,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import CurrentTasks from "@/components/dashboard/CurrentTasks.vue"
-import Performance from "@/components/dashboard/Performance.vue"
+<script lang="ts">
+import CurrentTasks from "@/components/dashboard/CurrentTasks.vue";
+import Performance from "@/components/dashboard/Performance.vue";
+
+export default {
+  components: {Performance, CurrentTasks}
+}
 </script>
