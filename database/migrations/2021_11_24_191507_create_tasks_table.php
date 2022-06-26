@@ -20,16 +20,16 @@ class CreateTasksTable extends Migration
             $table->foreignId('executor_id');
             $table->foreignId('client_id');
             $table->text('short_description');
-            $table->text('full_description');
-            $table->string('type');
-            $table->string('status');
-            $table->string('priority');
+            $table->text('full_description')->nullable();
+            $table->string('type')->default('consultation');
+            $table->string('status')->default('new');
+            $table->string('priority')->nullable();
             $table->text('tech_comment')->nullable();
             $table->text('client_comment')->nullable();
-            $table->integer('executor_time');
+            $table->integer('executor_time')->nullable();
             $table->timestamps();
             $table->timestamp('deadline_at')->nullable();
-            $table->timestamp('finished_at');
+            $table->timestamp('finished_at')->nullable();
         });
     }
 

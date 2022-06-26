@@ -2,7 +2,6 @@
   <Breadcrumbs />
   <div class="flex px-6">
     <Sidebar
-        :title="sidebarTitle"
         :model="model"
     />
     <Content
@@ -23,8 +22,7 @@ export default defineComponent({
   components: {Content, Sidebar, Breadcrumbs},
   data() {
     return {
-      sidebarTitle: 'Обращения',
-      model: 'task',
+      model: 'Task',
     }
   },
 })

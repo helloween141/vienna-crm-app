@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CoreController extends Controller
 {
@@ -12,7 +13,7 @@ class CoreController extends Controller
      * @param String $modelName
      * @return array|mixed
      */
-    public function getSidebar(Request $request, String $modelName = ''): mixed
+    public function getSidebar(Request $request, string $modelName = ''): mixed
     {
         $model = $this->getModel($modelName);
         $resource = $this->getResource($modelName . 'SidebarResource');
@@ -28,10 +29,10 @@ class CoreController extends Controller
             ->paginate();
 
         return $resource::collection($list)
-            ->additional($model::$sidebarAdditionalData ?? []);
+            ->additional($model::getSidebarAdditionalData() ?? []);
     }
 
-    public function getInterface(Request $request, String $modelName = ''): mixed
+    public function getInterface(Request $request, string $modelName = ''): ?array
     {
         $model = $this->getModel($modelName);
 
@@ -40,13 +41,15 @@ class CoreController extends Controller
         }
 
         return [
-            'fields' => $model::$fields,
-            'single_name' => $model::$singleName,
-            'accusative_name' => $model::$accusativeName
+            'fields' => $model::getFields(),
+            'single_title' => $model::$singleTitle ?? '',
+            'accusative_title' => $model::$accusativeTitle ?? '',
+            'sidebar_title' => $model::$sidebarTitle ?? ''
         ];
     }
 
-    public function getData(Request $request, String $modelName = '', Int $recordId = 0) {
+    public function getData(Request $request, string $modelName = '', int $recordId = 0)
+    {
         $model = $this->getModel($modelName);
         $resource = $this->getResource($modelName . 'Resource');
 
@@ -61,8 +64,32 @@ class CoreController extends Controller
         return $resource::collection($data);
     }
 
-    public function onSave(Request $request, String $modelName = '', Int $recordId = 0) {
-        // TODO: create/update
+    public function onSave(Request $request, string $modelName = '')
+    {
+        $model = $this->getModel($modelName);
+
+        if (!class_exists($model)) {
+            return null;
+        }
+
+        // TODO: validation?
+
+        $saveResult = false;
+        $requestedData = $request->all();
+
+        if (isset($requestedData['id'])) {
+            $record = $model::query()->findOrFail($requestedData['id']);
+            if ($record) {
+                $saveResult = $record->update($requestedData);
+            }
+        } else {
+            $user = Auth::user();
+            $saveResult = $model::create(array_merge($request->all(), ['user_id' => $user->id]));
+        }
+
+        return [
+            'success' => $saveResult
+        ];
     }
 
     private function getModel($name): string

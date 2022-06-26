@@ -21,12 +21,13 @@ export const useUserStore = defineStore({
     actions: {
         async getUserData() {
             try {
-                const userInfo = await axios.get('/api/user')
+                const userInfo = await axios.get('/api/user/')
                 this.auth = true
                 this.user = userInfo.data
-            }
-            catch (e) {
-                console.log(e)
+            } catch (error) {
+                this.auth = false
+                this.user = {}
+                console.error(error)
             }
         }
     }
