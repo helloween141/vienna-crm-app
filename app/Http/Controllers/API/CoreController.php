@@ -64,7 +64,7 @@ class CoreController extends Controller
         return $resource::collection($data);
     }
 
-    public function onSave(Request $request, string $modelName = '')
+    public function onSave(Request $request, string $modelName = ''): ?array
     {
         $model = $this->getModel($modelName);
 
@@ -72,10 +72,8 @@ class CoreController extends Controller
             return null;
         }
 
-        // TODO: validation?
-
         $saveResult = false;
-        $requestedData = $request->all();
+        $requestedData = $request->all(); // TODO: validated()
 
         if (isset($requestedData['id'])) {
             $record = $model::query()->findOrFail($requestedData['id']);
@@ -84,12 +82,36 @@ class CoreController extends Controller
             }
         } else {
             $user = Auth::user();
-            $saveResult = $model::create(array_merge($request->all(), ['user_id' => $user->id]));
+            $saveResult = $model::create(
+                array_merge($request->all(), ['user_id' => $user->id])
+            );
         }
 
         return [
             'success' => $saveResult
         ];
+    }
+
+    // TODO: return type ?array. Fix after debounce
+    public function getSearchResult(Request $request, string $modelName = ''): mixed
+    {
+        $model = $this->getModel($modelName);
+        $resource = $this->getResource($modelName . 'Resource');
+
+        if (!class_exists($model) || !class_exists($resource)) {
+            return null;
+        }
+
+        $searchString = trim($request->get('search_string', ''));
+        if ($searchString) {
+            $resultSearch = $model::query()
+                ->where('name', 'LIKE', "%{$searchString}%")
+                ->get();
+
+            return $resource::collection($resultSearch);
+        }
+
+        return [];
     }
 
     private function getModel($name): string

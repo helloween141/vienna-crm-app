@@ -2,6 +2,8 @@
 namespace App\Http\Controllers\API\traits;
 
 use App\Models\User;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +13,7 @@ trait AuthTrait {
     /**
      * Create
      */
-    public function create(Request $request): \Illuminate\Http\JsonResponse
+    public function create(Request $request): JsonResponse
     {
         try {
             $user = new User();
@@ -22,7 +24,7 @@ trait AuthTrait {
 
             $success = true;
             $message = 'Пользователь успешно создан';
-        } catch (\Illuminate\Database\QueryException $ex) {
+        } catch (QueryException $ex) {
             $success = false;
             $message = $ex->getMessage();
         }
@@ -38,7 +40,7 @@ trait AuthTrait {
     /**
      * Login
      */
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(Request $request): JsonResponse
     {
         $credentials = [
             'email' => $request->email,
@@ -61,13 +63,13 @@ trait AuthTrait {
     /**
      * Logout
      */
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): JsonResponse
     {
         try {
             Session::flush();
             $success = true;
             $message = 'Вы успешно вышли';
-        } catch (\Illuminate\Database\QueryException $ex) {
+        } catch (QueryException $ex) {
             $success = false;
             $message = $ex->getMessage();
         }

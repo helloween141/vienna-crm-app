@@ -45,11 +45,12 @@ class Task extends TaskBase
             ->sum('executor_time');
     }
 
-    public static function getActiveForUser(int $userId): Builder
+    public static function getActiveForUser(int $userId): Collection|array
     {
         return self::query()
-            ->with('client')
             ->where('status', '<>', 'complete')
-            ->where('user_id', $userId);
+            ->where('user_id', $userId)
+            ->orderBy('id', 'DESC')
+            ->get();
     }
 }

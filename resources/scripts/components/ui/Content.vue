@@ -21,11 +21,13 @@
         </button>
       </div>
       <div class="relative overflow-x-auto">
-        <form @submit.prevent="onSave">
+        <span class="text-white">{{formValues}}</span>
+        <form @submit.prevent="handleSave">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <tbody>
               <tr
                   v-for="field in formInterface.fields"
+                  v-show="!field.hidden"
                   :key="field"
                   class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white odd:bg-gray-50"
               >
@@ -33,52 +35,46 @@
                   {{ field.title }}
                 </th>
                 <td class="px-6 py-4 w-1/2">
-                  <input
+
+                  <InputField
                       v-if="field.type === 'string' || field.type === 'int'"
-                      type="text"
-                      :name="field.name"
-                      v-model="formValues[field.name]"
-                      :readonly="field.readonly"
-                      class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-1/2 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                      :field="field"
+                      :value="formValues[field.name]"
+                      @set-value="setValue"
                   />
 
-                  <textarea
+                  <TextField
                       v-else-if="field.type === 'text'"
-                      rows="5"
-                      v-model="formValues[field.name]"
-                      class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                  >
-                    {{formValues[field.name]}}
-                  </textarea>
+                      :field="field"
+                      :value="formValues[field.name]"
+                      @set-value="setValue"
+                  />
 
-                  <select
-                      v-else-if="field.type === 'select' && field.values.length > 0"
-                      v-model="formValues[field.name]"
-                      class="w-1/2 py-2 px-4"
-                  >
-                    <option
-                        v-for="(value, index) in field.values"
-                        :key="index"
-                        :value="value.name"
-                    >
-                        {{ value.title }}
-                    </option>
-                  </select>
+                  <SelectField
+                      v-else-if="field.type === 'select'"
+                      :field="field"
+                      :value="formValues[field.name]"
+                      @set-value="setValue"
+                  />
 
-                  <input
-                      v-if="field.type === 'datetime'"
-                      class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-1/2 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      type="text"
-                      :name="field.name"
-                      v-model="formValues[field.name]"
-                      :readonly="field.readonly"
+                  <PointerField
+                      v-else-if="field.type === 'pointer'"
+                      :field="field"
+                      :value="formValues[field.name]"
+                      @set-value="setValue"
+                  />
+
+                  <DateTimeField
+                      v-else-if="field.type === 'datetime'"
+                      :field="field"
+                      :value="formValues[field.name]"
+                      @set-value="setValue"
                   />
                 </td>
               </tr>
             </tbody>
           </table>
-          <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-5 mt-5">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-5 mt-5">
             Сохранить
           </button>
         </form>
@@ -88,14 +84,19 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue"
-import {useToast} from "vue-toastification"
-import Spinner from "@/components/Spinner.vue";
-import axios from "axios";
+import {defineComponent} from 'vue'
+import {useToast} from 'vue-toastification'
+import axios from 'axios';
+import * as moment from 'moment';
+import InputField from "@/components/ui/fields/InputField.vue";
+import TextField from "@/components/ui/fields/TextField.vue";
+import SelectField from "@/components/ui/fields/SelectField.vue";
+import PointerField from "@/components/ui/fields/PointerField.vue";
+import DateTimeField from "@/components/ui/fields/DateTimeField.vue";
 
 export default defineComponent({
   name: 'Content',
-  components: {Spinner},
+  components: {DateTimeField, PointerField, SelectField, TextField, InputField},
   data() {
     return {
       startTimer: false,
@@ -136,25 +137,38 @@ export default defineComponent({
           this.formValues = resultData.data.data[0]
           console.log(this.formValues)
         } else {
-          // Заполнение select-ов дефолтными значениями
+          //TODO: Refactoring
           this.formInterface.fields.forEach(field => {
             if (field.type === 'select') {
-              this.formValues = {...this.formValues, [field.name]: field.values[0].name}
+              const defaultValue = field.values.find(val => val.default)?.name || field.values[0].name
+
+              this.formValues = {...this.formValues, [field.name]: defaultValue}
             }
           })
         }
         this.loading = false;
-
+        this.prepareData()
       } catch (error) {
         console.error(error)
       }
     },
-    onChangeTimerState() {
-      this.startTimer = !this.startTimer
+    getFormData() {
+      const formData = new FormData()
+      Object.keys(this.formValues).forEach(key => {
+        let item = this.formValues[key]
+        if (item) {
+          if (typeof item === 'object' && item.id) {
+            formData.append(key, item.id)
+          } else {
+            formData.append(key, item)
+          }
+        }
+      })
+      return formData
     },
-    async onSave() {
+    async handleSave() {
       try {
-        const resultSave = await axios.post(`/api/core/${this.model}/save/`, this.formValues)
+        const resultSave = await axios.post(`/api/core/${this.model}/save/`, this.getFormData())
 
         // TODO: Redirect after success create
 
@@ -166,8 +180,17 @@ export default defineComponent({
       } catch (error) {
         console.error(error)
       }
-
+    },
+    setValue(fieldName, fieldValue) {
+      this.formValues = {...this.formValues, [fieldName]: fieldValue}
+    },
+    onChangeTimerState() {
+      this.startTimer = !this.startTimer
     },
   }
 })
 </script>
+
+<style scoped>
+
+</style>

@@ -15,7 +15,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/login',
+            path: '/login/',
             name: 'login',
             component: () => import('../views/LoginView.vue'),
             meta: {
@@ -24,7 +24,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/tasks/:id',
+            path: '/tasks/:id/',
             name: 'task',
             component: () => import('../views/TasksView.vue'),
             meta: {
@@ -45,7 +45,7 @@ const router = createRouter({
             }
         },
         {
-            path: '/tasks',
+            path: '/tasks/',
             name: 'tasks',
             component: () => import('../views/TasksView.vue'),
             meta: {

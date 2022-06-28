@@ -82,7 +82,16 @@ export default defineComponent({
     model: String
   },
   async mounted() {
-    await this.fetchData()
+    this.$watch(
+        () => this.$route.params,
+        async () => {
+          this.selectedId = parseInt(this.$route.params.id)
+          await this.fetchData()
+        },
+        {
+          immediate: true
+        }
+    )
   },
   methods: {
     async fetchData() {
@@ -101,15 +110,12 @@ export default defineComponent({
       }
     },
     setPage(page) {
-      this.$router.replace(`${this.$route.path}?page=${page}`)
-      this.fetchData()
+      this.$router.push(`${this.$route.path}?page=${page}`)
     },
     onOpenDetail(id: number) {
-      this.selectedId = id
       router.push({ name: this.$route.meta.detailUrl, params: { id } })
     },
     onCreateNew() {
-      // TODO: route to list
       this.$router.push(`/${this.fetchedData.url}/`)
     },
     onShowFilters() {

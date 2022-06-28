@@ -2,6 +2,8 @@
 
 namespace App\Models\Base;
 
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,9 +13,9 @@ class TaskBase extends Model implements IBase
 
     public static string $singleTitle = 'Обращение';
 
-    public static string $accusativeTitle = 'обращение';
-
     public static string $sidebarTitle = 'Обращения';
+
+    public static string $accusativeTitle = 'обращение';
 
     protected $guarded = ['created_at', 'updated_at'];
 
@@ -24,7 +26,8 @@ class TaskBase extends Model implements IBase
                 'name' => 'id',
                 'title' => 'Номер обращения',
                 'type' => 'string',
-                'readonly' => true
+                'readonly' => true,
+                'hidden' => true
             ],
             [
                 'name' => 'created_at',
@@ -35,12 +38,16 @@ class TaskBase extends Model implements IBase
             [
                 'name' => 'department',
                 'title' => 'Работы для отдела',
-                'type' => 'string'
+                'type' => 'string',
+                'required' => true
             ],
             [
                 'name' => 'client_id',
                 'title' => 'Клиент',
-                'type' => 'int'
+                'type' => 'pointer',
+                'search_model' => 'Client',
+                'required' => true,
+                'autocomplete' => true
             ],
             [
                 'name' => 'person_id',
@@ -50,7 +57,9 @@ class TaskBase extends Model implements IBase
             [
                 'name' => 'executor_id',
                 'title' => 'Ответственный специалист',
-                'type' => 'int'
+                'type' => 'select',
+                'values' => UserResource::collection(User::getExecutors()),
+                'required' => true
             ],
             [
                 'name' => 'type',
@@ -58,34 +67,36 @@ class TaskBase extends Model implements IBase
                 'type' => 'select',
                 'values' => [
                     [
-                        'name' => 'consultation',
-                        'title' => 'Консультация'
+                        'id' => 'consultation',
+                        'name' => 'Консультация',
+                        'default' => true
                     ],
                     [
-                        'name' => 'content',
-                        'title' => 'Работы по контенту'
+                        'id' => 'content',
+                        'name' => 'Работы по контенту'
                     ],
                     [
-                        'name' => 'code',
-                        'title' => 'Доработка кода'
+                        'id' => 'code',
+                        'name' => 'Доработка кода'
                     ],
                     [
-                        'name' => 'design',
-                        'title' => 'Дизайн'
+                        'id' => 'design',
+                        'name' => 'Дизайн'
                     ],
                     [
-                        'name' => 'configure',
-                        'title' => 'Конфигурирование системы'
+                        'id' => 'configure',
+                        'name' => 'Конфигурирование системы'
                     ],
                     [
-                        'name' => 'warranty',
-                        'title' => 'Гарантийные работы'
+                        'id' => 'warranty',
+                        'name' => 'Гарантийные работы'
                     ],
                     [
-                        'name' => 'other',
-                        'title' => 'Другое'
+                        'id' => 'other',
+                        'name' => 'Другое'
                     ],
-                ]
+                ],
+                'required' => true
             ],
             [
                 'name' => 'priority',
@@ -93,18 +104,20 @@ class TaskBase extends Model implements IBase
                 'type' => 'select',
                 'values' => [
                     [
-                        'name' => 'low',
-                        'title' => 'Низкий'
+                        'id' => 'low',
+                        'name' => 'Низкий',
+                        'default' => true
                     ],
                     [
-                        'name' => 'middle',
-                        'title' => 'Средний'
+                        'id' => 'middle',
+                        'name' => 'Средний'
                     ],
                     [
-                        'name' => 'high',
-                        'title' => 'Высокий'
+                        'id' => 'high',
+                        'name' => 'Высокий'
                     ],
-                ]
+                ],
+                'required' => true
             ],
             [
                 'name' => 'status',
@@ -112,39 +125,42 @@ class TaskBase extends Model implements IBase
                 'type' => 'select',
                 'values' => [
                     [
-                        'name' => 'new',
-                        'title' => 'Передано специалисту'
+                        'id' => 'new',
+                        'name' => 'Передано специалисту',
+                        'default' => true
                     ],
                     [
-                        'name' => 'progress',
-                        'title' => 'В процессе выполнения'
+                        'id' => 'progress',
+                        'name' => 'В процессе выполнения'
                     ],
                     [
-                        'name' => 'complete',
-                        'title' => 'Выполнено'
+                        'id' => 'complete',
+                        'name' => 'Выполнено'
                     ],
                     [
-                        'name' => 'waiting_answer',
-                        'title' => 'Ожидается ответ клиента'
+                        'id' => 'waiting_answer',
+                        'name' => 'Ожидается ответ клиента'
                     ],
                     [
-                        'name' => 'waiting_payment',
-                        'title' => 'Ожидается оплата клиента'
+                        'id' => 'waiting_payment',
+                        'name' => 'Ожидается оплата клиента'
                     ],
                     [
-                        'name' => 'additional',
-                        'title' => 'По доп. соглашению'
+                        'id' => 'additional',
+                        'name' => 'По доп. соглашению'
                     ],
                     [
-                        'name' => 'cancel',
-                        'title' => 'Отложено/отменено'
+                        'id' => 'cancel',
+                        'name' => 'Отложено/отменено'
                     ],
-                ]
+                ],
+                'required' => true
             ],
             [
                 'name' => 'short_description',
                 'title' => 'Суть проблемы',
-                'type' => 'text'
+                'type' => 'text',
+                'required' => true
             ],
             [
                 'name' => 'full_description',
@@ -152,12 +168,12 @@ class TaskBase extends Model implements IBase
                 'type' => 'text'
             ],
             [
-                'name' => 'deadline_date',
+                'name' => 'deadline_at',
                 'title' => 'Выполнить до',
                 'type' => 'datetime'
             ],
             [
-                'name' => 'complete_date',
+                'name' => 'finished_at',
                 'title' => 'Дата выполнения',
                 'type' => 'datetime'
             ],

@@ -35,3 +35,9 @@ export const taskTypes: any = {
     'warranty': 'Гарантийные работы',
     'other': 'Другое'
 }
+
+export const taskPriorities: any = {
+    'low': 'Низкий',
+    'middle': 'Средний',
+    'high': 'Высокий'
+}

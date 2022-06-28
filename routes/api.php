@@ -29,6 +29,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function
 Route::group(['prefix' => 'core', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/{model}/sidebar/', [CoreController::class, 'getSidebar']);
     Route::get('/{model}/interface/', [CoreController::class, 'getInterface']);
+    Route::get('/{model}/search/', [CoreController::class, 'getSearchResult']);
     Route::get('/{model}/{recordId}/', [CoreController::class, 'getData']);
     Route::post('/{model}/save/', [CoreController::class, 'onSave']);
 });
