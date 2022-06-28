@@ -178,7 +178,7 @@ class TaskBase extends Model implements IBase
                 'type' => 'datetime'
             ],
             [
-                'name' => 'current_time',
+                'name' => 'executor_time',
                 'title' => 'Мой таймер (мин.)',
                 'type' => 'int',
                 'readonly' => true

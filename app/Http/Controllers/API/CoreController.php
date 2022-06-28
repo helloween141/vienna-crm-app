@@ -64,7 +64,7 @@ class CoreController extends Controller
         return $resource::collection($data);
     }
 
-    public function onSave(Request $request, string $modelName = ''): ?array
+    public function saveData(Request $request, string $modelName = ''): ?array
     {
         $model = $this->getModel($modelName);
 
@@ -75,6 +75,7 @@ class CoreController extends Controller
         $saveResult = false;
         $requestedData = $request->all(); // TODO: validated()
 
+        // TODO: findOrNew?
         if (isset($requestedData['id'])) {
             $record = $model::query()->findOrFail($requestedData['id']);
             if ($record) {

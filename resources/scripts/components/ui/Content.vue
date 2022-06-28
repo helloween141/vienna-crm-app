@@ -4,24 +4,24 @@
       <Spinner/>
     </div>
     <div v-else>
-      <div class="flex mb-5 justify-between items-center">
-        <h1 v-if="!formValues.id" class="text-2xl dark:text-white">Создать {{formInterface.accusative_title}}</h1>
-        <h1 v-else class="text-2xl dark:text-white">{{ formInterface.single_title }} {{ formValues.id }}</h1>
-        <button
-            v-if="!startTimer"
-            @click="onChangeTimerState"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-0">
-          Включить таймер
-        </button>
-        <button
-            v-else
-            @click="onChangeTimerState"
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-0">
-          Выключить таймер
-        </button>
+      <div class="mb-5 justify-between items-center">
+        <h1 v-if="!formValues.id" class="text-2xl dark:text-white">
+          Создать {{formInterface.accusative_title}}
+        </h1>
+        <h1 v-else class="text-2xl dark:text-white">
+          {{ formInterface.single_title }} {{ formValues.id }}
+        </h1>
       </div>
+
+      <Timer
+          v-if="formValues['id'] && model === 'task'"
+          @set-value="setValue"
+          :task-id="formValues['id']"
+          :initial-time="formValues['executor_time']"
+      />
+
       <div class="relative overflow-x-auto">
-        <span class="text-white">{{formValues}}</span>
+
         <form @submit.prevent="handleSave">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <tbody>
@@ -93,18 +93,17 @@ import TextField from "@/components/ui/fields/TextField.vue";
 import SelectField from "@/components/ui/fields/SelectField.vue";
 import PointerField from "@/components/ui/fields/PointerField.vue";
 import DateTimeField from "@/components/ui/fields/DateTimeField.vue";
-
+import Timer from "@/components/ui/Timer.vue"
 export default defineComponent({
   name: 'Content',
-  components: {DateTimeField, PointerField, SelectField, TextField, InputField},
+  components: {DateTimeField, PointerField, SelectField, TextField, InputField, Timer},
   data() {
     return {
-      startTimer: false,
       loading: false,
       toast: useToast(),
       formInterface: {},
       formValues: {},
-      recordId: 0
+      recordId: 0,
     }
   },
   props: {
@@ -136,18 +135,9 @@ export default defineComponent({
           const resultData = await axios.get(`/api/core/${this.model}/${this.recordId}/`)
           this.formValues = resultData.data.data[0]
           console.log(this.formValues)
-        } else {
-          //TODO: Refactoring
-          this.formInterface.fields.forEach(field => {
-            if (field.type === 'select') {
-              const defaultValue = field.values.find(val => val.default)?.name || field.values[0].name
-
-              this.formValues = {...this.formValues, [field.name]: defaultValue}
-            }
-          })
         }
+
         this.loading = false;
-        this.prepareData()
       } catch (error) {
         console.error(error)
       }
@@ -182,10 +172,8 @@ export default defineComponent({
       }
     },
     setValue(fieldName, fieldValue) {
+      console.log(fieldName)
       this.formValues = {...this.formValues, [fieldName]: fieldValue}
-    },
-    onChangeTimerState() {
-      this.startTimer = !this.startTimer
     },
   }
 })
