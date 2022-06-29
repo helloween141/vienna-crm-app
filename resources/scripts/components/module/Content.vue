@@ -21,7 +21,7 @@
       />
 
       <div class="relative overflow-x-auto">
-
+        <span class="text-white">{{formValues}}</span>
         <form @submit.prevent="handleSave">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <tbody>

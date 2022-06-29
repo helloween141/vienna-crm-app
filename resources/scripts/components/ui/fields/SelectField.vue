@@ -1,7 +1,7 @@
 <template>
   <v-select
       label="name"
-      v-model="currentValue"
+      v-model="initialValue"
       :options="field.values"
       :required="field.required"
       :searchable="false"
@@ -16,19 +16,20 @@ export default {
   name: 'SelectField',
   data() {
     return {
-      currentValue: {}
+      initialValue: {}
     }
   },
   props: {
     field: Object,
-    value: Object
+    value: ''
   },
   created() {
     if (!this.value) {
-      this.currentValue = this.field.values.find(val => val.default) || this.field.values[0]
+      this.initialValue = this.field.values.find(val => val.default) || this.field.values[0]
     } else {
-      this.currentValue = typeof this.value === 'object' ?
-          this.value : this.field.values.find(val => val.id === this.value)
+      this.initialValue = typeof this.value === 'object' ?
+          this.value :
+          this.field.values.find(val => val.id === this.value)
     }
 
   },

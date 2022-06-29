@@ -4,6 +4,7 @@ namespace App\Models\Base;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,7 +34,8 @@ class TaskBase extends Model implements IBase
                 'name' => 'created_at',
                 'title' => 'Дата регистрации',
                 'type' => 'datetime',
-                'readonly' => true
+                'readonly' => true,
+                'default' => Carbon::now()
             ],
             [
                 'name' => 'department',
@@ -47,7 +49,6 @@ class TaskBase extends Model implements IBase
                 'type' => 'pointer',
                 'search_model' => 'Client',
                 'required' => true,
-                'autocomplete' => true
             ],
             [
                 'name' => 'person_id',

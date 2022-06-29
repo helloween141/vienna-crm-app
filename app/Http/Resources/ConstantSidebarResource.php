@@ -4,8 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExecutorResource extends JsonResource
+class ConstantSidebarResource extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *
@@ -16,7 +17,8 @@ class ExecutorResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'title' => $this->title,
+            'value' => $this->value,
         ];
     }
 }

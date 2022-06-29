@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import Toast from "vue-toastification"
-import Spinner from './components/Spinner.vue'
+import Spinner from './components/ui/Spinner.vue'
 import 'vue-toastification/dist/index.css'
 import router from './router'
 import 'flowbite'

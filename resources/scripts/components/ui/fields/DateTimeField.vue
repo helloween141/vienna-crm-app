@@ -1,6 +1,6 @@
 <template>
   <Datepicker
-      v-model="value"
+      v-model="initialValue"
       :readonly="field.readonly"
       :required="field.required"
       :format="'dd.MM.yyyy HH:mm'"
@@ -18,9 +18,17 @@ import * as moment from "moment";
 
 export default {
   name: 'DateTimeField',
+  data() {
+    return {
+      initialValue: ''
+    }
+  },
   props: {
     field: Object,
     value: ''
+  },
+  created() {
+    this.initialValue = this.value ? this.value : this.field.default
   },
   methods: {
     handleInput(value) {

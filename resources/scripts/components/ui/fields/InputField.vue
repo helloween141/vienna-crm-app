@@ -1,7 +1,7 @@
 <template>
   <input
       type="text"
-      v-model="value"
+      v-model="initialValue"
       :readonly="field.readonly"
       :required="field.required"
       @input="handleInput"
@@ -12,13 +12,21 @@
 <script>
 export default {
   name: 'InputField',
+  data() {
+    return {
+      initialValue: ''
+    }
+  },
   props: {
     field: Object,
     value: ''
   },
+  created() {
+    this.initialValue = this.value ? this.value : this.field.default
+  },
   methods: {
     handleInput() {
-      this.$emit('set-value', this.field.name, this.value)
+      this.$emit('set-value', this.field.name, this.initialValue)
     }
   }
 }

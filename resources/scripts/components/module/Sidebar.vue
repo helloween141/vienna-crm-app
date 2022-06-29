@@ -60,13 +60,13 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import { $vfm } from "vue-final-modal";
-import VModal from "./modal/VModal.vue";
-import VTitle from "./modal/VTitle.vue";
-import VContent from "./modal/VContent.vue";
+import VModal from "../ui/modal/VModal.vue";
+import VTitle from "../ui/modal/VTitle.vue";
+import VContent from "../ui/modal/VContent.vue";
 import router from "@/router";
-import Pagination from "@/components/Pagination.vue";
+import Pagination from "@/components/ui/Pagination.vue";
 import axios from "axios";
-import Spinner from "@/components/Spinner.vue";
+import Spinner from "@/components/ui/Spinner.vue";
 
 export default defineComponent({
   name: "Sidebar",

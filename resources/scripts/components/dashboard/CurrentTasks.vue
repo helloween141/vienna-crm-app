@@ -71,7 +71,7 @@
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
               {{ task.id }}
             </th>
-            <td class="px-6 py-4">{{ task.created_at }}</td>
+            <td class="px-6 py-4">{{ formatDate(task.created_at) }}</td>
             <td class="px-6 py-4">
               <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">{{ task.client_id.name }}</a>
             </td>
@@ -116,7 +116,8 @@ import {defineComponent} from 'vue'
 import {taskStatuses, taskTypes, taskPriorities} from '@/data/constants'
 import axios from "axios";
 import {useUserStore} from "@/stores/user";
-import Spinner from "@/components/Spinner.vue";
+import Spinner from "@/components/ui/Spinner.vue";
+import * as moment from "moment";
 
 export default defineComponent({
   name: 'CurrentTasks',
@@ -179,6 +180,9 @@ export default defineComponent({
       } else {
         this.currentTasks = this.tasks
       }
+    },
+    formatDate(value) {
+      return moment(value).format('DD.MM.YYYY HH:mm')
     },
     changeExecutor() {
       this.fetchData()

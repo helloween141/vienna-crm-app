@@ -22,18 +22,21 @@ export default {
   },
   props: {
     field: Object,
-    value: {}
+    value: Object
   },
   methods: {
     async fetchData(search, loading) {
       try {
         loading(true)
-        const resultSearch = await axios.get(`/api/core/${this.field.search_model}/search/`, {
-          params: {
-            'search_string': search
-          }
-        })
-        this.options = resultSearch.data.data
+        const searchModel = this.field?.search_model || ''
+        if (searchModel) {
+          const resultSearch = await axios.get(`/api/core/${searchModel}/search/`, {
+            params: {
+              'search_string': search
+            }
+          })
+          this.options = resultSearch.data.data
+        }
         loading(false)
       } catch (error) {
         console.error(error)

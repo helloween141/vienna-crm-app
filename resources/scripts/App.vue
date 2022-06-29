@@ -11,7 +11,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {useThemeStore} from "@/stores/theme";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/ui/Navbar.vue";
 import AuthView from "@/views/LoginView.vue";
 
 export default defineComponent({

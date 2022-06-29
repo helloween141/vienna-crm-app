@@ -81,7 +81,7 @@
 import {defineComponent} from 'vue'
 import {months, years} from '@/data/constants'
 import axios from "axios";
-import Spinner from "@/components/Spinner.vue";
+import Spinner from "@/components/ui/Spinner.vue";
 
 export default defineComponent({
   name: "Performance",

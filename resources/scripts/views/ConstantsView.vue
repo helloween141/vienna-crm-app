@@ -13,11 +13,11 @@ import Content from '@/components/module/Content.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 
 export default defineComponent({
-  name: 'TasksView',
+  name: 'ConstantsView',
   components: {Content, Sidebar, Breadcrumbs},
   data() {
     return {
-      model: 'task'
+      model: 'constant'
     }
   },
 })
