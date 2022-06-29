@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CoreController extends Controller
 {
@@ -15,11 +14,13 @@ class CoreController extends Controller
      */
     public function getSidebar(Request $request, string $modelName = ''): mixed
     {
-        $model = $this->getModel($modelName);
-        $resource = $this->getResource($modelName . 'SidebarResource');
+        $model = $this->getModelClass($modelName);
+        $resource = $this->getResourceClass($modelName . 'SidebarResource');
 
         if (!class_exists($model) || !class_exists($resource)) {
-            return null;
+            return [
+                'success' => 'false'
+            ];
         }
 
         // TODO: apply filters
@@ -34,27 +35,30 @@ class CoreController extends Controller
 
     public function getInterface(Request $request, string $modelName = ''): ?array
     {
-        $model = $this->getModel($modelName);
+        $model = $this->getModelClass($modelName);
 
         if (!class_exists($model)) {
-            return null;
+            return [
+                'success' => 'false'
+            ];
         }
 
         return [
             'fields' => $model::getFields(),
-            'single_title' => $model::$singleTitle ?? '',
-            'accusative_title' => $model::$accusativeTitle ?? '',
-            'sidebar_title' => $model::$sidebarTitle ?? ''
+            'detail_title' => $model::$detailTitle ?? '',
+            'accusative_detail_title' => $model::$accusativeDetailTitle ?? ''
         ];
     }
 
     public function getData(Request $request, string $modelName = '', int $recordId = 0)
     {
-        $model = $this->getModel($modelName);
-        $resource = $this->getResource($modelName . 'Resource');
+        $model = $this->getModelClass($modelName);
+        $resource = $this->getResourceClass($modelName . 'Resource');
 
         if (!class_exists($model) || !class_exists($resource)) {
-            return null;
+            return [
+                'success' => 'false'
+            ];
         }
 
         $data = $model::query()
@@ -66,27 +70,21 @@ class CoreController extends Controller
 
     public function saveData(Request $request, string $modelName = ''): ?array
     {
-        $model = $this->getModel($modelName);
+        $Model = $this->getModelClass($modelName);
 
-        if (!class_exists($model)) {
-            return null;
+        if (!class_exists($Model)) {
+            return [
+                'success' => 'false'
+            ];
         }
 
-        $saveResult = false;
-        $requestedData = $request->all(); // TODO: validated()
+        $requiredFields = $this->getRequiredFields($Model::getFields());
+        $validatedData = $request->validate($requiredFields);
 
-        // TODO: findOrNew?
-        if (isset($requestedData['id'])) {
-            $record = $model::query()->findOrFail($requestedData['id']);
-            if ($record) {
-                $saveResult = $record->update($requestedData);
-            }
-        } else {
-            $user = Auth::user();
-            $saveResult = $model::create(
-                array_merge($request->all(), ['user_id' => $user->id])
-            );
-        }
+        $saveResult = $Model::query()->updateOrCreate(
+            ['id' => $validatedData['id'] ?? 0],
+            $validatedData
+        );
 
         return [
             'success' => $saveResult
@@ -96,11 +94,13 @@ class CoreController extends Controller
     // TODO: return type ?array. Fix after debounce
     public function getSearchResult(Request $request, string $modelName = ''): mixed
     {
-        $model = $this->getModel($modelName);
-        $resource = $this->getResource($modelName . 'Resource');
+        $model = $this->getModelClass($modelName);
+        $resource = $this->getResourceClass($modelName . 'Resource');
 
         if (!class_exists($model) || !class_exists($resource)) {
-            return null;
+            return [
+                'success' => 'false'
+            ];
         }
 
         $searchString = trim($request->get('search_string', ''));
@@ -115,12 +115,23 @@ class CoreController extends Controller
         return [];
     }
 
-    private function getModel($name): string
+    private function getRequiredFields($fields): array
+    {
+        $result = [];
+        foreach ($fields as $field) {
+            if (isset($field['required'])) {
+                $result = [...$result, $field['name'] => 'required'];
+            }
+        }
+        return $result;
+    }
+
+    private function getModelClass($name): string
     {
         return 'App\\Models\\' . ucfirst($name);
     }
 
-    private function getResource($name): string
+    private function getResourceClass($name): string
     {
         return 'App\\Http\\Resources\\' . ucfirst($name);
     }

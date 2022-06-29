@@ -12,11 +12,9 @@ class TaskBase extends Model implements IBase
 {
     use HasFactory;
 
-    public static string $singleTitle = 'Обращение';
+    public static string $detailTitle = 'Обращение';
 
-    public static string $sidebarTitle = 'Обращения';
-
-    public static string $accusativeTitle = 'обращение';
+    public static string $accusativeDetailTitle = 'обращение';
 
     protected $guarded = ['created_at', 'updated_at'];
 
@@ -214,6 +212,8 @@ class TaskBase extends Model implements IBase
             'url' => 'tasks',
             'headers' => [
                 'Номер', 'Дата', 'Суть обращения'
+                //['Номер', 'Дата', 'Суть обращения']
+                //['id', 'created_at', 'short_description']
             ],
             'filters' => []
         ];

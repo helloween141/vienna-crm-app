@@ -10,13 +10,9 @@ class ConstantBase extends Model implements IBase
 {
     use HasFactory;
 
-    public static string $singleTitle = 'Константа';
+    public static string $detailTitle = 'Константа';
 
-    public static string $sidebarTitle = 'Константы';
-
-    public static string $accusativeTitle = 'константа';
-
-    public $timestamps = false;
+    public static string $accusativeDetailTitle = 'константу';
 
     protected $guarded = ['created_at', 'updated_at'];
 

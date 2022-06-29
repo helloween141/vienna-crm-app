@@ -6,10 +6,10 @@
     <div v-else>
       <div class="mb-5 justify-between items-center">
         <h1 v-if="!formValues.id" class="text-2xl dark:text-white">
-          Создать {{formInterface.accusative_title}}
+          Создать {{formInterface.accusative_detail_title}}
         </h1>
         <h1 v-else class="text-2xl dark:text-white">
-          {{ formInterface.single_title }} {{ formValues.id }}
+          {{ formInterface.detail_title }} {{ formValues.id }}
         </h1>
       </div>
 
