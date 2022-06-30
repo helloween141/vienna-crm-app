@@ -14,10 +14,10 @@ class CoreController extends Controller
      */
     public function getSidebar(Request $request, string $modelName = ''): mixed
     {
-        $model = $this->getModelClass($modelName);
-        $resource = $this->getResourceClass($modelName . 'SidebarResource');
+        $Model = $this->getModelClass($modelName);
+        $Resource = $this->getResourceClass($modelName . 'SidebarResource');
 
-        if (!class_exists($model) || !class_exists($resource)) {
+        if (!class_exists($Model) || !class_exists($Resource)) {
             return [
                 'success' => 'false'
             ];
@@ -25,12 +25,17 @@ class CoreController extends Controller
 
         // TODO: apply filters
 
-        $list = $model::query()
+        $list = $Model::query()
             ->orderBy('id', 'DESC')
             ->paginate();
 
-        return $resource::collection($list)
-            ->additional($model::getSidebarAdditionalData() ?? []);
+        return $Resource::collection($list)->additional(
+            [
+                'headers' => $this->getSidebarFields($Model::getFields()) ?? [],
+                'url' => $Model::$sidebarUrl ?? '',
+                'title' => $Model::$sidebarTitle ?? ''
+            ]
+        );
     }
 
     public function getInterface(Request $request, string $modelName = ''): ?array
@@ -78,16 +83,18 @@ class CoreController extends Controller
             ];
         }
 
+        $id = (int) $request->post('id', 0);
+
         $requiredFields = $this->getRequiredFields($Model::getFields());
         $validatedData = $request->validate($requiredFields);
 
         $saveResult = $Model::query()->updateOrCreate(
-            ['id' => $validatedData['id'] ?? 0],
+            ['id' => $id],
             $validatedData
         );
 
         return [
-            'success' => $saveResult
+            'id' => $saveResult->id
         ];
     }
 
@@ -121,6 +128,17 @@ class CoreController extends Controller
         foreach ($fields as $field) {
             if (isset($field['required'])) {
                 $result = [...$result, $field['name'] => 'required'];
+            }
+        }
+        return $result;
+    }
+
+    private function getSidebarFields($fields): array
+    {
+        $result = [];
+        foreach ($fields as $field) {
+            if (isset($field['show_in_sidebar'])) {
+                $result = [...$result, $field['name'] => $field['title']];
             }
         }
         return $result;

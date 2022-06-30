@@ -18,6 +18,7 @@ class ConstantSidebarResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'name' => $this->name,
             'value' => $this->value,
         ];
     }

@@ -159,13 +159,19 @@ export default defineComponent({
     async handleSave() {
       try {
         const resultSave = await axios.post(`/api/core/${this.model}/save/`, this.getFormData())
+        const id = resultSave.data?.id
 
-        // TODO: Redirect after success create
-
-        if (resultSave.data.success) {
+        if (id) {
           this.toast.success("Данные сохранены!", {
             timeout: 3000
           });
+          
+          // TODO: Redirect after success create ({params: id})
+          this.$router.push(`${this.$route.path}`, {
+            params: {
+              id
+            }
+          })
         }
       } catch (error) {
         console.error(error)

@@ -16,6 +16,10 @@ class TaskBase extends Model implements IBase
 
     public static string $accusativeDetailTitle = 'обращение';
 
+    public static string $sidebarTitle = 'Обращение';
+
+    public static string $sidebarUrl = 'tasks';
+
     protected $guarded = ['created_at', 'updated_at'];
 
     public static function getFields(): array
@@ -26,14 +30,16 @@ class TaskBase extends Model implements IBase
                 'title' => 'Номер обращения',
                 'type' => 'string',
                 'readonly' => true,
-                'hidden' => true
+                'hidden' => true,
+                'show_in_sidebar' => true
             ],
             [
                 'name' => 'created_at',
                 'title' => 'Дата регистрации',
                 'type' => 'datetime',
                 'readonly' => true,
-                'default' => Carbon::now()
+                'default' => Carbon::now(),
+                'show_in_sidebar' => true
             ],
             [
                 'name' => 'department',
@@ -159,7 +165,8 @@ class TaskBase extends Model implements IBase
                 'name' => 'short_description',
                 'title' => 'Суть проблемы',
                 'type' => 'text',
-                'required' => true
+                'required' => true,
+                'show_in_sidebar' => true
             ],
             [
                 'name' => 'full_description',
@@ -178,7 +185,7 @@ class TaskBase extends Model implements IBase
             ],
             [
                 'name' => 'executor_time',
-                'title' => 'Мой таймер (мин.)',
+                'title' => 'Общий таймер (мин.)',
                 'type' => 'int',
                 'readonly' => true
             ],
@@ -202,20 +209,6 @@ class TaskBase extends Model implements IBase
                 'title' => 'Комментарий для клиента',
                 'type' => 'text'
             ],
-        ];
-    }
-
-    public static function getSidebarAdditionalData(): array
-    {
-        return [
-            'title' => 'Обращения',
-            'url' => 'tasks',
-            'headers' => [
-                'Номер', 'Дата', 'Суть обращения'
-                //['Номер', 'Дата', 'Суть обращения']
-                //['id', 'created_at', 'short_description']
-            ],
-            'filters' => []
         ];
     }
 }

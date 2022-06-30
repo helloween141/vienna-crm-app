@@ -1,6 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import DashboardView from '../views/DashboardView.vue'
 import {useUserStore} from "@/stores/user";
+import tasksRoute from "@/router/tasksRoute";
+import constantsRoute from "@/router/constantsRoute";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,85 +25,8 @@ const router = createRouter({
                 title: 'Авторизация'
             }
         },
-        {
-            path: '/constants/',
-            name: 'constants',
-            component: () => import('../views/ConstantsView.vue'),
-            meta: {
-                middleware: 'auth',
-                title: 'Константы',
-                detailUrl: 'constant',
-                breadCrumb() {
-                    return [
-                        {
-                            text: 'Константы',
-                            link: '/constants/'
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            path: '/constants/:id/',
-            name: 'constant',
-            component: () => import('../views/ConstantsView.vue'),
-            meta: {
-                middleware: 'auth',
-                title: 'Обращение',
-                breadCrumb(route) {
-                    const paramConstantId = route.params.id
-                    return [
-                        {
-                            text: 'Константы',
-                            link: '/constants/'
-                        },
-                        {
-                            text: paramConstantId,
-                        }
-                    ]
-                }
-            }
-        },
-
-        {
-            path: '/tasks/:id/',
-            name: 'task',
-            component: () => import('../views/TasksView.vue'),
-            meta: {
-                middleware: 'auth',
-                title: 'Обращение',
-                breadCrumb(route) {
-                    const paramTaskId = route.params.id
-                    return [
-                        {
-                            text: 'Обращения',
-                            link: '/tasks/'
-                        },
-                        {
-                            text: paramTaskId,
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            path: '/tasks/',
-            name: 'tasks',
-            component: () => import('../views/TasksView.vue'),
-            meta: {
-                middleware: 'auth',
-                title: 'Обращения',
-                detailUrl: 'task',
-                breadCrumb() {
-                    return [
-                        {
-                            text: 'Обращения',
-                            link: '/tasks/'
-                        }
-                    ]
-                }
-            }
-        }
+        ...tasksRoute,
+        ...constantsRoute
     ]
 });
 

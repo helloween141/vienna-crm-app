@@ -29,23 +29,31 @@
       <div class="mb-5 overflow-y-auto bg-gray-50 rounded dark:bg-gray-800">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" class="px-6 py-3" v-for="header in fetchedData.headers">
-              {{ header }}
-            </th>
-          </tr>
+            <tr>
+              <th v-for="(name, key) in fetchedData.headers"
+                   :key="key"
+                   scope="col"
+                   class="px-6 py-3"
+              >
+                {{ name }}
+              </th>
+            </tr>
           </thead>
           <tbody>
-          <tr v-for="value in fetchedData.data"
-              class="bg-white border-b dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 dark:border-gray-700 cursor-pointer"
-              :class="{'dark:bg-gray-600 bg-gray-100': value.id === selectedId}"
-              :key="value.id"
-              @click="onOpenDetail(value.id)"
-          >
-            <td v-for="v in value" class="px-6 py-4">
-              {{ v }}
-            </td>
-          </tr>
+            <tr v-for="value in fetchedData.data"
+                @click="onOpenDetail(value.id)"
+                :key="value.id"
+                class="bg-white border-b dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 dark:border-gray-700 cursor-pointer"
+                :class="{'dark:bg-gray-600 bg-gray-100': value.id === selectedId}"
+            >
+              <td v-for="(v, i, key) in value"
+                  :key="key"
+                  v-show="fetchedData.headers[i]"
+                  class="px-6 py-4"
+              >
+                {{ v }}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

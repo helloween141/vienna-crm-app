@@ -14,6 +14,10 @@ class ConstantBase extends Model implements IBase
 
     public static string $accusativeDetailTitle = 'константу';
 
+    public static string $sidebarTitle = 'Константы';
+
+    public static string $sidebarUrl = 'constants';
+
     protected $guarded = ['created_at', 'updated_at'];
 
     public static function getFields(): array
@@ -24,31 +28,22 @@ class ConstantBase extends Model implements IBase
                 'title' => 'Название',
                 'type' => 'string',
                 'required' => true,
+                'show_in_sidebar' => true
             ],
             [
                 'name' => 'name',
                 'title' => 'Название (лат.)',
                 'type' => 'string',
                 'required' => true,
+                'show_in_sidebar' => true
             ],
             [
                 'name' => 'value',
                 'title' => 'Значение',
                 'type' => 'string',
                 'required' => true,
+                'show_in_sidebar' => true
             ],
-        ];
-    }
-
-    public static function getSidebarAdditionalData(): array
-    {
-        return [
-            'title' => 'Константы',
-            'url' => 'constants',
-            'headers' => [
-                'Название', 'Значение'
-            ],
-            'filters' => []
         ];
     }
 }
