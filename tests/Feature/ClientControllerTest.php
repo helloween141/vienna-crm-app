@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class ClientControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic feature test example.
      *

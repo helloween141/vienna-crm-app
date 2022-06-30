@@ -16,7 +16,7 @@ class TaskControllerTest extends TestCase
         Sanctum::actingAs($user);
         $user->delete();
 
-        $response = $this->get('/api/core/task/record/' . Task::all()->random()->id);
+        $response = $this->get('/api/core/task/' . Task::all()->random()->id . '/');
         $response->assertOk();
     }
 }

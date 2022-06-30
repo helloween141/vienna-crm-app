@@ -31,8 +31,6 @@ Route::group(['prefix' => 'tasks', 'middleware' => 'auth:sanctum'], function () 
     Route::post('/update-timer/', [TaskController::class, 'updateTimer']);
 });
 
-
-
 Route::group(['prefix' => 'core', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/{model}/sidebar/', [CoreController::class, 'getSidebar']);
     Route::get('/{model}/interface/', [CoreController::class, 'getInterface']);

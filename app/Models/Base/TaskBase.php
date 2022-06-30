@@ -2,7 +2,9 @@
 
 namespace App\Models\Base;
 
+use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\UserResource;
+use App\Models\Department;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,7 +46,9 @@ class TaskBase extends Model implements IBase
             [
                 'name' => 'department',
                 'title' => 'Работы для отдела',
-                'type' => 'string',
+                'type' => 'select',
+                'values' => DepartmentResource::collection(Department::all()),
+                'identify' => 'title',
                 'required' => true
             ],
             [
@@ -52,6 +56,7 @@ class TaskBase extends Model implements IBase
                 'title' => 'Клиент',
                 'type' => 'pointer',
                 'search_model' => 'Client',
+                'identify' => 'name',
                 'required' => true,
             ],
             [
@@ -64,6 +69,7 @@ class TaskBase extends Model implements IBase
                 'title' => 'Ответственный специалист',
                 'type' => 'select',
                 'values' => UserResource::collection(User::getExecutors()),
+                'identify' => 'name',
                 'required' => true
             ],
             [
@@ -185,13 +191,18 @@ class TaskBase extends Model implements IBase
             ],
             [
                 'name' => 'executor_time',
-                'title' => 'Общий таймер (мин.)',
+                'title' => 'Мой таймер (мин.)',
                 'type' => 'int',
                 'readonly' => true
             ],
             [
                 'name' => 'client_time',
                 'title' => 'Время для клиента (мин.)',
+                'type' => 'int'
+            ],
+            [
+                'name' => 'summary_time',
+                'title' => 'Общее затраченное время (мин.)',
                 'type' => 'int'
             ],
             [

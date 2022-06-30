@@ -1,6 +1,6 @@
 <template>
   <v-select
-      label="name"
+      :label="identifyLabel"
       v-model="initialValue"
       :options="field.values"
       :required="field.required"
@@ -16,7 +16,8 @@ export default {
   name: 'SelectField',
   data() {
     return {
-      initialValue: {}
+      initialValue: {},
+      identifyLabel: ''
     }
   },
   props: {
@@ -27,15 +28,15 @@ export default {
     if (!this.value) {
       this.initialValue = this.field.values.find(val => val.default) || this.field.values[0]
     } else {
-      this.initialValue = typeof this.value === 'object' ?
-          this.value :
-          this.field.values.find(val => val.id === this.value)
+      this.initialValue = typeof this.value === 'object' ? this.value : this.field.values.find(val => val.id === this.value)
     }
+
+    this.identifyLabel = this.field.identify || 'name'
 
   },
   methods: {
     handleInput(value) {
-      this.$emit('set-value', this.field.name, value)
+      this.$emit('set-value', (this.field.identify || this.field.name), value)
     }
   }
 }

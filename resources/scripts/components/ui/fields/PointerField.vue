@@ -1,6 +1,6 @@
 <template>
   <v-select
-      label="name"
+      :label="identifyLabel"
       v-model="value"
       :options="options"
       :required="field.required"
@@ -17,12 +17,16 @@ export default {
   name: 'PointerField',
   data() {
     return {
-      options: []
+      options: [],
+      identifyLabel: ''
     }
   },
   props: {
     field: Object,
     value: Object
+  },
+  created() {
+    this.identifyLabel = this.field.identify || 'name'
   },
   methods: {
     async fetchData(search, loading) {
@@ -43,7 +47,7 @@ export default {
       }
     },
     handleInput() {
-      this.$emit('set-value', this.field.name, this.value)
+      this.$emit('set-value', (this.field.identify || this.field.name), this.value)
     }
   }
 }

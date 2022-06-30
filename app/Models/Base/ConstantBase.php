@@ -18,7 +18,9 @@ class ConstantBase extends Model implements IBase
 
     public static string $sidebarUrl = 'constants';
 
-    protected $guarded = ['created_at', 'updated_at'];
+    protected $guarded = [];
+
+    public $timestamps = false;
 
     public static function getFields(): array
     {

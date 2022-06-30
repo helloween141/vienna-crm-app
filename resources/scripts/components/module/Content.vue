@@ -144,6 +144,8 @@ export default defineComponent({
     },
     getFormData() {
       const formData = new FormData()
+
+      // TODO: Возможно не formValues
       Object.keys(this.formValues).forEach(key => {
         let item = this.formValues[key]
         if (item) {
@@ -165,7 +167,7 @@ export default defineComponent({
           this.toast.success("Данные сохранены!", {
             timeout: 3000
           });
-          
+
           // TODO: Redirect after success create ({params: id})
           this.$router.push(`${this.$route.path}`, {
             params: {
@@ -179,7 +181,7 @@ export default defineComponent({
     },
     setValue(fieldName, fieldValue) {
       console.log(fieldName)
-      this.formValues = {...this.formValues, [fieldName]: fieldValue}
+      this.formValues[fieldName] = fieldValue
     },
   }
 })
