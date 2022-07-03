@@ -87,13 +87,12 @@
 import {defineComponent} from 'vue'
 import {useToast} from 'vue-toastification'
 import axios from 'axios';
-import * as moment from 'moment';
-import InputField from "@/components/ui/fields/InputField.vue";
-import TextField from "@/components/ui/fields/TextField.vue";
-import SelectField from "@/components/ui/fields/SelectField.vue";
-import PointerField from "@/components/ui/fields/PointerField.vue";
-import DateTimeField from "@/components/ui/fields/DateTimeField.vue";
-import Timer from "@/components/ui/Timer.vue"
+import InputField from '@/components/ui/fields/InputField.vue';
+import TextField from '@/components/ui/fields/TextField.vue';
+import SelectField from '@/components/ui/fields/SelectField.vue';
+import PointerField from '@/components/ui/fields/PointerField.vue';
+import DateTimeField from '@/components/ui/fields/DateTimeField.vue';
+import Timer from '@/components/ui/Timer.vue'
 export default defineComponent({
   name: 'Content',
   components: {DateTimeField, PointerField, SelectField, TextField, InputField, Timer},

@@ -117,7 +117,7 @@ import {taskStatuses, taskTypes, taskPriorities} from '@/data/constants'
 import axios from "axios";
 import {useUserStore} from "@/stores/user";
 import Spinner from "@/components/ui/Spinner.vue";
-import * as moment from "moment";
+import moment from "moment";
 
 export default defineComponent({
   name: 'CurrentTasks',
