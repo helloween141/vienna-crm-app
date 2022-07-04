@@ -159,7 +159,7 @@ export default defineComponent({
     },
     async handleSave() {
       try {
-        const resultSave = await axios.post(`/api/core/${this.model}/save/`, this.getFormData())
+        const resultSave = await axios.post(`/api/core/${this.model}/save`, this.getFormData())
         const id = resultSave.data?.id
 
         if (id) {
