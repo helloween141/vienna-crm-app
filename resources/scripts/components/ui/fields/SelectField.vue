@@ -1,13 +1,13 @@
 <template>
   <v-select
+      v-model="currentValue"
       :label="identifyLabel"
-      v-model="initialValue"
       :options="field.values"
       :required="field.required"
       :searchable="false"
       :clearable="false"
       @update:modelValue="handleInput"
-      class="w-1/2 py-2 bg-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+      class="py-2 bg-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
   />
 </template>
 
@@ -16,8 +16,8 @@ export default {
   name: 'SelectField',
   data() {
     return {
-      initialValue: {},
-      identifyLabel: ''
+      currentValue: {},
+      identifyLabel: this.field.identify || 'name'
     }
   },
   props: {
@@ -26,17 +26,17 @@ export default {
   },
   created() {
     if (!this.value) {
-      this.initialValue = this.field.values.find(val => val.default) || this.field.values[0]
+      this.currentValue = this.field.values.find(val => val.default) || this.field.values[0]
     } else {
-      this.initialValue = typeof this.value === 'object' ? this.value : this.field.values.find(val => val.id === this.value)
+      this.currentValue = (typeof this.value === 'object') ? this.value : this.field.values.find(val => val.id === this.value)
     }
 
-    this.identifyLabel = this.field.identify || 'name'
-
+    this.handleInput(this.currentValue)
   },
+
   methods: {
     handleInput(value) {
-      this.$emit('set-value', (this.field.identify || this.field.name), value)
+      this.$emit('set-value', this.field.name, value)
     }
   }
 }

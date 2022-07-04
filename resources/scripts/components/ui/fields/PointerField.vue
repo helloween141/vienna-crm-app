@@ -6,7 +6,7 @@
       :required="field.required"
       @search="fetchData"
       @update:modelValue="handleInput"
-      class="w-1/2 py-2 bg-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+      class="py-2 bg-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
   />
 </template>
 
@@ -18,15 +18,12 @@ export default {
   data() {
     return {
       options: [],
-      identifyLabel: ''
+      identifyLabel: this.field.identify || 'name'
     }
   },
   props: {
     field: Object,
     value: Object
-  },
-  created() {
-    this.identifyLabel = this.field.identify || 'name'
   },
   methods: {
     async fetchData(search, loading) {
@@ -47,7 +44,7 @@ export default {
       }
     },
     handleInput() {
-      this.$emit('set-value', (this.field.identify || this.field.name), this.value)
+      this.$emit('set-value', this.field.name, this.value)
     }
   }
 }

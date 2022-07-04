@@ -69,7 +69,9 @@
           <tr v-for="task in currentTasks"
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50">
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-              {{ task.id }}
+              <RouterLink :to="{ name: 'task', params: { id: task.id }}">
+                {{task.id}}
+              </RouterLink>
             </th>
             <td class="px-6 py-4">{{ formatDate(task.created_at) }}</td>
             <td class="px-6 py-4">

@@ -1,7 +1,7 @@
 <template>
   <textarea
       rows="5"
-      v-model="initialValue"
+      v-model="currentValue"
       :required="field.required"
       @input="handleInput"
       class="bg-gray-200 appearance-none border-gray-200 rounded w-full text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
@@ -15,7 +15,7 @@ export default {
   name: 'TextField',
   data() {
     return {
-      initialValue: ''
+      currentValue: ''
     }
   },
   props: {
@@ -23,11 +23,11 @@ export default {
     value: ''
   },
   created() {
-    this.initialValue = this.value ? this.value : this.field.default
+    this.currentValue = this.value ? this.value : this.field.default
   },
   methods: {
     handleInput() {
-      this.$emit('set-value', this.field.name, this.initialValue)
+      this.$emit('set-value', this.field.name, this.currentValue)
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 h-full pl-5 pt-5">
     <div v-if="loading">
-      <Spinner/>
+      <Spinner />
     </div>
     <div v-else>
       <div class="mb-5 justify-between items-center">
@@ -21,7 +21,7 @@
       />
 
       <div class="relative overflow-x-auto">
-        <span class="text-white">{{formValues}}</span>
+        <!--<span class="text-white">{{formValues}}</span>-->
         <form @submit.prevent="handleSave">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <tbody>
@@ -106,7 +106,8 @@ export default defineComponent({
     }
   },
   props: {
-    model: String
+    model: String,
+    detailRouteName: String
   },
   async mounted() {
     this.$watch(
@@ -144,7 +145,6 @@ export default defineComponent({
     getFormData() {
       const formData = new FormData()
 
-      // TODO: Возможно не formValues
       Object.keys(this.formValues).forEach(key => {
         let item = this.formValues[key]
         if (item) {
@@ -167,12 +167,7 @@ export default defineComponent({
             timeout: 3000
           });
 
-          // TODO: Redirect after success create ({params: id})
-          this.$router.push(`${this.$route.path}`, {
-            params: {
-              id
-            }
-          })
+          await this.$router.push({ name: this.detailRouteName, params: { id } })
         }
       } catch (error) {
         console.error(error)

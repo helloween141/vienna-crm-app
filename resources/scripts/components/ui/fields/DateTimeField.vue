@@ -8,7 +8,6 @@
       @update:modelValue="handleInput"
       locale="ru"
       autoApply
-      class="w-1/2"
       inputClassName="appearance-none bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
   />
 </template>

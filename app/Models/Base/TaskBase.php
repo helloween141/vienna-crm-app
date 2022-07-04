@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class TaskBase extends Model implements IBase
 {
@@ -44,6 +45,19 @@ class TaskBase extends Model implements IBase
                 'show_in_sidebar' => true
             ],
             [
+                'name' => 'user_id',
+                'title' => 'Автор обращения',
+                'type' => 'select',
+                'values' => [
+                    [
+                        'id' => Auth::id(),
+                        'name' => Auth::user()->name,
+                        'default' => true
+                    ]
+                ],
+                'required' => true
+            ],
+            [
                 'name' => 'department',
                 'title' => 'Работы для отдела',
                 'type' => 'select',
@@ -57,12 +71,14 @@ class TaskBase extends Model implements IBase
                 'type' => 'pointer',
                 'search_model' => 'Client',
                 'identify' => 'name',
-                'required' => true,
+                'required' => true
             ],
             [
                 'name' => 'person_id',
                 'title' => 'Контактное лицо',
-                'type' => 'int'
+                'type' => 'pointer',
+                'search_model' => 'User',
+                'identify' => 'name'
             ],
             [
                 'name' => 'executor_id',

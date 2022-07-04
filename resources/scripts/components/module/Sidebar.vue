@@ -71,7 +71,6 @@ import { $vfm } from "vue-final-modal";
 import VModal from "../ui/modal/VModal.vue";
 import VTitle from "../ui/modal/VTitle.vue";
 import VContent from "../ui/modal/VContent.vue";
-import router from "@/router";
 import Pagination from "@/components/ui/Pagination.vue";
 import axios from "axios";
 import Spinner from "@/components/ui/Spinner.vue";
@@ -87,7 +86,8 @@ export default defineComponent({
     }
   },
   props: {
-    model: String
+    model: String,
+    detailRouteName: String
   },
   async mounted() {
     this.$watch(
@@ -118,13 +118,13 @@ export default defineComponent({
       }
     },
     setPage(page) {
-      this.$router.push(`${this.$route.path}?page=${page}`)
+      this.$router.push({ name: this.detailRouteName, query: { page } })
     },
     onOpenDetail(id: number) {
-      router.push({ name: this.$route.meta.detailUrl, params: { id } })
+      this.$router.push({ name: this.detailRouteName, params: { id } })
     },
     onCreateNew() {
-      this.$router.push(`/${this.fetchedData.url}/`)
+      this.$router.push({ name: this.fetchedData.url})
     },
     onShowFilters() {
       $vfm.show({

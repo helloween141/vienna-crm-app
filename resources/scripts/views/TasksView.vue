@@ -1,8 +1,8 @@
 <template>
   <Breadcrumbs />
   <div class="flex px-6">
-    <Sidebar :model="model" />
-    <Content :model="model" />
+    <Sidebar :model="model" :detail-route-name="detailRouteName"  />
+    <Content :model="model" :detail-route-name="detailRouteName" />
   </div>
 </template>
 
@@ -17,7 +17,8 @@ export default defineComponent({
   components: {Content, Sidebar, Breadcrumbs},
   data() {
     return {
-      model: 'task'
+      model: 'task',
+      detailRouteName: 'task'
     }
   },
 })
