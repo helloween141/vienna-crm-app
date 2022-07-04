@@ -7,7 +7,7 @@ export interface ThemeState {
 export const useThemeStore = defineStore({
     id: 'themeStore',
     state: (): ThemeState => ({
-        isDark: localStorage.getItem('dark-theme') === 'true'
+        isDark: localStorage.getItem('dark-theme') === 'true' || (!localStorage.getItem('dark-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
     }),
     actions: {
         switchTheme() {
