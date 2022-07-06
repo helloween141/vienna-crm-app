@@ -1,5 +1,5 @@
 <template>
-  <aside class="flex-shrink-0 hidden w-1/3 bg-white border-r dark:border-gray-700 dark:border-primary-darker dark:bg-gray-900 md:block pr-5 pt-5" aria-label="Sidebar">
+  <aside class="w-1/3 bg-white border-r dark:border-gray-700 dark:border-primary-darker dark:bg-gray-900 md:block pr-5 pt-5" aria-label="Sidebar">
     <div v-if="loading">
       <Spinner/>
     </div>
@@ -87,7 +87,8 @@ export default defineComponent({
   },
   props: {
     model: String,
-    detailRouteName: String
+    detailRouteName: String,
+    listRouteName: String,
   },
   async mounted() {
     this.$watch(
@@ -118,7 +119,7 @@ export default defineComponent({
       }
     },
     setPage(page) {
-      this.$router.push({ name: this.detailRouteName, query: { page } })
+      this.$router.push({ name: this.listRouteName, query: { page } })
     },
     onOpenDetail(id: number) {
       this.$router.push({ name: this.detailRouteName, params: { id } })
