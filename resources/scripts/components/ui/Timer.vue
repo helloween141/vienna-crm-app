@@ -12,7 +12,7 @@
         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-0">
       Выключить таймер
     </button>
-    <div v-if="hour || min"
+    <div v-if="hour || minute"
          class="text-white text-1xl flex items-center"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -22,7 +22,7 @@
       </svg>
       <div class="pl-3">
         <span v-if="hour > 0">{{ hour }} ч.&nbsp;</span>
-        <span v-if="min > 0">{{ min }} мин.</span>
+        <span v-if="minute > 0">{{ minute }} мин.</span>
       </div>
     </div>
   </div>
@@ -37,20 +37,29 @@ export default {
   data() {
     return {
       isStarted: false,
-      min: 0,
       hour: 0,
+      minute: 0,
       timer: null,
-      currentTime: this.initialTime,
       timeField: 'executor_time'
     }
   },
   props: {
-    initialTime: Number,
     taskId: Number
   },
-  created() {
-    this.hour = Math.floor(this.currentTime / 60)
-    this.min = this.currentTime % 60
+  async mounted() {
+    try {
+      const result = await axios.get(`/api/tasks/get-timer/`,{
+        params: {
+          'id': this.taskId
+        }
+      })
+      this.currentTime = result.data.time
+      this.hour = Math.floor(this.currentTime / 60)
+      this.min = this.currentTime % 60
+      this.$emit('set-value', this.timeField, this.currentTime)
+    } catch (error) {
+      console.log(error)
+    }
   },
   methods: {
     onChangeTimerState() {
@@ -72,12 +81,12 @@ export default {
 
     },
     calcTime() {
-      this.min++
-      if (this.min === 60) {
+      this.minute++
+      if (this.minute === 60) {
         this.hour++;
-        this.min = 0
+        this.minute = 0
       }
-      this.currentTime = this.min + (this.hour * 60)
+      this.currentTime = this.minute + (this.hour * 60)
 
       this.update()
     },

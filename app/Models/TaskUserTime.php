@@ -10,4 +10,6 @@ class TaskUserTime extends Model
     use HasFactory;
 
     public $timestamps = false;
+
+    public $fillable = ['user_id', 'task_id', 'time'];
 }

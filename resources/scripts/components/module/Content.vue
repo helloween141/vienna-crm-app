@@ -17,7 +17,6 @@
           v-if="formValues['id'] && model === 'task'"
           @set-value="setValue"
           :task-id="formValues['id']"
-          :initial-time="formValues['executor_time']"
       />
 
       <div class="relative overflow-x-auto">
