@@ -15,15 +15,15 @@ import axios from "axios";
 
 export default {
   name: 'PointerField',
+  props: {
+    field: Object,
+    value: Object
+  },
   data() {
     return {
       options: [],
       identifyLabel: this.field.identify || 'name'
     }
-  },
-  props: {
-    field: Object,
-    value: Object
   },
   methods: {
     async fetchData(search, loading) {

@@ -6,7 +6,7 @@
     <div v-else-if="!loading && fetchedData">
       <div class="flex mb-2 justify-between">
         <div>
-          <span class="text-2xl dark:text-white">{{ fetchedData.title }}</span>
+          <span class="text-2xl dark:text-white">{{ title }}</span>
         </div>
         <div>
           <button
@@ -62,39 +62,39 @@
     <div v-else>
       <span class="dark:text-white">Ничего не найдено!</span>
     </div>
+
   </aside>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
 import { $vfm } from "vue-final-modal";
-import VModal from "../ui/modal/VModal.vue";
-import VTitle from "../ui/modal/VTitle.vue";
-import VContent from "../ui/modal/VContent.vue";
+import VModal from "../../ui/modal/VModal.vue";
+import VTitle from "../../ui/modal/VTitle.vue";
+import VContent from "../../ui/modal/VContent.vue";
 import Pagination from "@/components/ui/Pagination.vue";
 import axios from "axios";
 import Spinner from "@/components/ui/Spinner.vue";
 
 export default defineComponent({
-  name: "Sidebar",
+  name: 'DefaultSidebar',
   components: {Spinner, Pagination},
   data() {
     return {
       fetchedData: {},
       selectedId: 0,
-      loading: false
+      loading: false,
+      title: this.$route.meta.title,
+      moduleUrl: this.$route.meta.moduleUrl,
+      moduleName: this.$route.name
     }
-  },
-  props: {
-    model: String,
-    detailRouteName: String,
-    listRouteName: String,
   },
   async mounted() {
     this.$watch(
         () => this.$route.params,
         async () => {
           this.selectedId = parseInt(this.$route.params.id)
+          console.log(this.$route)
           await this.fetchData()
         },
         {
@@ -106,7 +106,7 @@ export default defineComponent({
     async fetchData() {
       try {
         this.loading = true
-        const result = await axios.get(`/api/core/${this.model}/sidebar/`, {
+        const result = await axios.get(`/api/core/${this.moduleUrl}/sidebar/`, {
           params: {
             'page': this.$route.query.page || 1
           }
@@ -118,14 +118,14 @@ export default defineComponent({
         console.error(error)
       }
     },
-    setPage(page) {
-      this.$router.push({ name: this.listRouteName, query: { page } })
+    setPage(page: number) {
+      this.$router.push({ name: this.moduleName, query: { page } })
     },
     onOpenDetail(id: number) {
-      this.$router.push({ name: this.detailRouteName, params: { id } })
+      this.$router.push({ name: this.moduleName, params: { id } })
     },
     onCreateNew() {
-      this.$router.push({ name: this.fetchedData.url})
+      this.$router.push({ name: this.moduleName})
     },
     onShowFilters() {
       $vfm.show({
@@ -138,9 +138,6 @@ export default defineComponent({
         slots: {
           title: {
             component: VTitle,
-            bind: {
-              text: 'Hello, vue-final-modal'
-            }
           },
           default: {
             component: VContent,

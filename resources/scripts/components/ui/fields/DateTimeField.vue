@@ -17,17 +17,14 @@ import moment from 'moment'
 
 export default {
   name: 'DateTimeField',
-  data() {
-    return {
-      initialValue: ''
-    }
-  },
   props: {
     field: Object,
     value: ''
   },
-  created() {
-    this.initialValue = this.value ? this.value : this.field.default
+  data() {
+    return {
+      initialValue: this.value || this.field.default
+    }
   },
   methods: {
     handleInput(value) {

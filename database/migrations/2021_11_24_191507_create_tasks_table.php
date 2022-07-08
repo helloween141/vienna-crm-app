@@ -26,7 +26,7 @@ class CreateTasksTable extends Migration
             $table->string('priority')->nullable();
             $table->text('tech_comment')->nullable();
             $table->text('client_comment')->nullable();
-            $table->integer('executor_time')->nullable();
+            $table->integer('client_total_time')->nullable();
             $table->timestamps();
             $table->timestamp('deadline_at', 0)->nullable();
             $table->timestamp('finished_at', 0)->nullable();

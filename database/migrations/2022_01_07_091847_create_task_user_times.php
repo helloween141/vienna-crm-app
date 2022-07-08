@@ -17,7 +17,8 @@ class CreateTaskUserTimes extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('task_id');
-            $table->foreignId('time');
+            $table->integer('timer');
+            $table->integer('client_time');
         });
     }
 

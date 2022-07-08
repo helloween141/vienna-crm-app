@@ -14,15 +14,15 @@
 <script>
 export default {
   name: 'SelectField',
+  props: {
+    field: Object,
+    value: ''
+  },
   data() {
     return {
       currentValue: {},
       identifyLabel: this.field.identify || 'name'
     }
-  },
-  props: {
-    field: Object,
-    value: ''
   },
   created() {
     if (!this.value) {
@@ -33,7 +33,6 @@ export default {
 
     this.handleInput(this.currentValue)
   },
-
   methods: {
     handleInput(value) {
       this.$emit('set-value', this.field.name, value)

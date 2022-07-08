@@ -206,25 +206,32 @@ class TaskBase extends Model implements IBase
                 'type' => 'datetime'
             ],
             [
+                'name' => 'client_time',
+                'title' => 'Мое затраченное время (для клиента), мин.',
+                'type' => 'int'
+            ],
+            [
                 'name' => 'executor_time',
                 'title' => 'Мой таймер (мин.)',
                 'type' => 'int',
                 'readonly' => true
             ],
             [
-                'name' => 'client_time',
-                'title' => 'Время для клиента (мин.)',
-                'type' => 'int'
-            ],
-            [
-                'name' => 'summary_time',
-                'title' => 'Общее затраченное время (мин.)',
-                'type' => 'int'
-            ],
-            [
                 'name' => 'max_time',
-                'title' => 'Макс. время выполнения (мин.)',
-                'type' => 'string'
+                'title' => 'Максимальное время выполнения, мин.',
+                'type' => 'int'
+            ],
+            [
+                'name' => 'client_total_time',
+                'title' => 'Общее затраченное время (для клиента), мин.',
+                'type' => 'int',
+                'readonly' => true
+            ],
+            [
+                'name' => 'timer_total_time',
+                'title' => 'Суммарный таймер, мин.',
+                'type' => 'int',
+                'readonly' => true
             ],
             [
                 'name' => 'tech_comment',

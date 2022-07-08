@@ -18,7 +18,8 @@ class TaskUserTimeFactory extends Factory
         return [
             'user_id' => User::all()->random()->id,
             'task_id' => Task::all()->random()->id,
-            'time' => $this->faker->numberBetween(15, 960),
+            'timer' => $this->faker->numberBetween(15, 960),
+            'client_time' => $this->faker->numberBetween(15, 960),
         ];
     }
 }

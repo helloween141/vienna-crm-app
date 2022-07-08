@@ -42,7 +42,7 @@ class Task extends TaskBase
             ->where('user_id', '=', $user->id)
             ->whereYear('finished_at', '=', $year)
             ->whereBetween('finished_at', $daysPeriod)
-            ->sum('executor_time');
+            ->sum('client_time');
     }
 
     public static function getActiveForUser(int $userId): Collection|array

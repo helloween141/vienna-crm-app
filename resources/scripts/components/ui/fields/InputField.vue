@@ -16,14 +16,14 @@ export default {
     field: Object,
     value: ''
   },
-  computed: {
-    currentValue() {
-      return this.value ? this.value : this.field.default
+  data() {
+    return {
+      currentValue: this.value || this.field.default
     }
   },
   methods: {
     handleInput() {
-      this.$emit('set-value', this.field.name, this.initialValue)
+      this.$emit('set-value', this.field.name, this.currentValue)
     }
   }
 }

@@ -13,17 +13,14 @@
 <script>
 export default {
   name: 'TextField',
-  data() {
-    return {
-      currentValue: ''
-    }
-  },
   props: {
     field: Object,
     value: ''
   },
-  created() {
-    this.currentValue = this.value ? this.value : this.field.default
+  data() {
+    return {
+      currentValue: this.value || this.field.default
+    }
   },
   methods: {
     handleInput() {
