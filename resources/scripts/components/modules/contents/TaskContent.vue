@@ -13,8 +13,9 @@
 
       <Timer
           v-if="formValues.id"
-          @set-value="setTimerValue"
+          @set-timer-value="setTimerValue"
           :task-id="formValues.id"
+          :timer-field="timerFieldName"
       />
 
       <ModuleForm
@@ -36,7 +37,18 @@ import {formMixin} from '@/mixins/formMixin'
 export default defineComponent({
   name: 'TaskContent',
   components: {ModuleForm, Timer},
-  mixins: [formMixin]
+  mixins: [formMixin],
+  data() {
+    return {
+      timerFieldName: 'executor_time'
+    }
+  },
+  methods: {
+    setTimerValue(timerField, timerValue) {
+      console.log(this.formValues[timerField])
+      this.formValues[timerField] = timerValue
+    }
+  }
 })
 </script>
 

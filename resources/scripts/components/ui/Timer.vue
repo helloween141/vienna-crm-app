@@ -30,21 +30,21 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   name: 'Timer',
+  props: {
+    taskId: Number,
+    timerField: String
+  },
   data() {
     return {
       isStarted: false,
       hour: 0,
       minute: 0,
       timer: null,
-      timeField: 'executor_time'
     }
-  },
-  props: {
-    taskId: Number
   },
   async mounted() {
     try {
@@ -53,10 +53,11 @@ export default {
           'id': this.taskId
         }
       })
-      this.currentTime = result.data.time
+      this.currentTime = result.data.timer
       this.hour = Math.floor(this.currentTime / 60)
       this.min = this.currentTime % 60
-      this.$emit('set-value', this.timeField, this.currentTime)
+      console.log(result.data)
+      this.$emit('set-timer-value', this.timerField, this.currentTime)
     } catch (error) {
       console.log(error)
     }
@@ -72,12 +73,12 @@ export default {
       }
     },
     launchTimer() {
-      const date = new Date();
+      const date = new Date()
 
       setTimeout( () => {
-        this.timer = setInterval(this.calcTime, 60000);
-        this.calcTime();
-      }, (60 - date.getSeconds()) * 1000);
+        this.timer = setInterval(this.calcTime, 60000)
+        this.calcTime()
+      }, (60 - date.getSeconds()) * 1000)
 
     },
     calcTime() {
@@ -87,17 +88,16 @@ export default {
         this.minute = 0
       }
       this.currentTime = this.minute + (this.hour * 60)
-
       this.update()
     },
     async update() {
       try {
         await axios.post(`/api/tasks/update-timer/`, {
           'id': this.taskId,
-          'time': this.currentTime
+          'timer': this.currentTime
         })
-        console.log('Timer updated', this.currentTime)
-        this.$emit('set-value', this.timeField, this.currentTime)
+
+        this.$emit('set-timer-value', this.timerField, this.currentTime)
       } catch (error) {
         console.log(error)
       }

@@ -14,7 +14,7 @@ export default {
   name: 'InputField',
   props: {
     field: Object,
-    value: ''
+    value: [String, Number]
   },
   data() {
     return {
@@ -24,6 +24,11 @@ export default {
   methods: {
     handleInput() {
       this.$emit('set-value', this.field.name, this.currentValue)
+    }
+  },
+  watch: {
+    value: function(newVal, oldVal) {
+      this.currentValue = newVal
     }
   }
 }

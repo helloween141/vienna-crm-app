@@ -11,5 +11,5 @@ class TaskUserTime extends Model
 
     public $timestamps = false;
 
-    public $fillable = ['user_id', 'task_id', 'time'];
+    public $fillable = ['user_id', 'task_id', 'timer', 'client_time'];
 }
