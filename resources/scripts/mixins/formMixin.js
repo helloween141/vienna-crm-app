@@ -32,12 +32,12 @@ export const formMixin = {
                 this.formValues = {}
                 this.loading = true;
 
-                const resultInterface = await axios.get(`/api/core/${this.moduleUrl}/interface/`)
+                const resultInterface = await axios.get(`/api/core/${this.moduleUrl}/interface`)
                 this.formInterface = resultInterface.data
                 console.log(this.formInterface)
 
                 if (this.recordId) {
-                    const resultData = await axios.get(`/api/core/${this.moduleUrl}/${this.recordId}/`)
+                    const resultData = await axios.get(`/api/core/${this.moduleUrl}/${this.recordId}`)
                     this.formValues = resultData.data.data[0]
                     console.log(this.formValues)
                 }

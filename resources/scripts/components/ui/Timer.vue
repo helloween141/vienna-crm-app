@@ -33,7 +33,7 @@ export default {
   },
   async mounted() {
     try {
-      const result = await axios.get(`/api/tasks/get-all-time/`,{
+      const result = await axios.get(`/api/tasks/get-all-time`,{
         params: {
           'id': this.taskId
         }
@@ -62,7 +62,7 @@ export default {
     },
     async update() {
       try {
-        const response = await axios.post(`/api/tasks/update-timer/`, {
+        const response = await axios.post(`/api/tasks/update-timer`, {
           'id': this.taskId
         })
         this.$emit('set-timer-value', this.timerField, response.data.timer)
