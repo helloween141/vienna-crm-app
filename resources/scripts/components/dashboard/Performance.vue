@@ -33,7 +33,6 @@
           </div>
         </div>
       </div>
-
       <div v-if="loading">
         <Spinner/>
       </div>
@@ -79,7 +78,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {months, years} from '@/data/constants'
+import {months, years, year, month} from '@/data/constants'
 import axios from "axios";
 import Spinner from "@/components/ui/Spinner.vue";
 
@@ -91,8 +90,8 @@ export default defineComponent({
       performances: {},
       months,
       years,
-      yearFilter: '2022',
-      monthFilter: '6',
+      yearFilter: year,
+      monthFilter: month,
       loading: false
     }
   },
@@ -113,7 +112,7 @@ export default defineComponent({
         const resultPerformances = await axios.get('/api/dashboard/performance/', {
           params: {
             'filter_year': this.yearFilter,
-            'filter_month': this.monthFilter
+            'filter_month': (this.monthFilter + 1)
           }
         })
         this.performances = resultPerformances.data

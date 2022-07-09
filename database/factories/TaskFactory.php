@@ -30,7 +30,7 @@ class TaskFactory extends Factory
                 'additional', 'cancel'
             ]),
             'priority' => $this->faker->randomElement(['low', 'middle', 'high']),
-            'finished_at' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
+            'finished_at' => $this->faker->dateTimeBetween('-10 day', '+1 day'),
             'client_total_time' => $this->faker->numberBetween(15, 200),
         ];
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use App\Models\TaskUserTime;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -45,9 +46,9 @@ class DashboardController extends Controller
                 $currentDayStart, $beforeLastDayEnd, $beforeLastYear,
                 $lastDayEnd, $currentDayEnd, $lastYear, $currentYear
             ) {
-                $currentMonthTime = Task::getUserMonthTime($user, $currentYear, [$currentDayStart, $currentDayEnd]);
-                $lastMonthTime = Task::getUserMonthTime($user, $lastYear, [$lastDayStart, $lastDayEnd]);
-                $beforeLastMonthTime = Task::getUserMonthTime($user, $beforeLastYear, [$beforeLastDayStart, $beforeLastDayEnd]);
+                $currentMonthTime = TaskUserTime::getSumMonthTime($user->id, $currentYear, [$currentDayStart, $currentDayEnd]);
+                $lastMonthTime = TaskUserTime::getSumMonthTime($user->id, $lastYear, [$lastDayStart, $lastDayEnd]);
+                $beforeLastMonthTime = TaskUserTime::getSumMonthTime($user->id, $beforeLastYear, [$beforeLastDayStart, $beforeLastDayEnd]);
 
                 return [
                     'id' => $user->id,

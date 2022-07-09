@@ -23,28 +23,6 @@ class Task extends TaskBase
         return $this->belongsTo(User::class);
     }
 
-    public function singleTimerTime(): HasOne
-    {
-        return $this->hasOne(TaskUserTime::class);
-    }
-
-    /**
-     * @param User $user
-     * @param int $year
-     * @param array $daysPeriod
-     * @return int Получить суммарное время выполнения задач за месяц (в минутах)
-     * Получить суммарное время выполнения задач за месяц (в минутах)
-     */
-    public static function getUserMonthTime(User $user, int $year, array $daysPeriod): int
-    {
-        // TODO: Учитывать участие в других задачах
-        return static::query()
-            ->where('user_id', '=', $user->id)
-            ->whereYear('finished_at', '=', $year)
-            ->whereBetween('finished_at', $daysPeriod)
-            ->sum('client_time');
-    }
-
     public static function getActiveForUser(int $userId): Collection|array
     {
         return self::query()

@@ -10,14 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function getTimer(Request $request): array
+    public function getAllTime(Request $request): array
     {
         $taskId = (int)$request->get('id', 0);
 
         $userTime = TaskUserTime::query()
-            ->where('task_id', $taskId)
             ->where('user_id', Auth::id())
+            ->where('task_id', $taskId)
             ->first();
+
         return [
             'timer' => $userTime->timer ?? 0
         ];
@@ -26,20 +27,18 @@ class TaskController extends Controller
     public function updateTimer(Request $request): array
     {
         $taskId = (int)$request->post('id', 0);
-        $timer = (int)$request->post('timer', 0);
 
-        $result = TaskUserTime::query()->updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'task_id' => $taskId
-            ],
-            [
-                'timer' => $timer
-            ]
-        );
+        $taskUserTime = TaskUserTime::query()->firstOrCreate([
+            'user_id' => Auth::id(),
+            'task_id' => $taskId
+        ]);
+
+        $newTimerValue = $taskUserTime->timer++;
+
+        $taskUserTime->save(['timer' => $newTimerValue]);
 
         return [
-            'success' => (bool) $result
+            'timer' => $newTimerValue
         ];
     }
 

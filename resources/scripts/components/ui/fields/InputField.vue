@@ -27,8 +27,11 @@ export default {
     }
   },
   watch: {
-    value: function(newVal, oldVal) {
-      this.currentValue = newVal
+    value: {
+      immediate: true,
+      handler (val, oldVal) {
+        this.currentValue = val
+      }
     }
   }
 }

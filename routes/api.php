@@ -28,7 +28,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function
 });
 
 Route::group(['prefix' => 'tasks', 'middleware' => 'auth:sanctum'], function () {
-    Route::get('get-timer', [TaskController::class, 'getTimer']);
+    Route::get('get-all-time', [TaskController::class, 'getAllTime']);
     Route::post('update-timer', [TaskController::class, 'updateTimer']);
 });
 

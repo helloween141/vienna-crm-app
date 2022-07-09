@@ -1,20 +1,21 @@
-export const months: any = {
-    1: 'Январь',
-    2: 'Февраль',
-    3: 'Март',
-    4: 'Апрель',
-    5: 'Май',
-    6: 'Июнь',
-    7: 'Июль',
-    8: 'Август',
-    9: 'Сентябрь',
-    10: 'Октябрь',
-    11: 'Ноябрь',
-    12: 'Декабрь'
-}
+export const months: string[] = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь'
+]
 
-const now = new Date().getUTCFullYear()
-export const years: number[] = Array(now - (now - 13)).fill('').map((v, idx) => now - idx)
+export const year = new Date().getUTCFullYear()
+export const month = new Date().getMonth()
+export const years: number[] = Array(year - (year - 13)).fill('').map((v, idx) => year - idx)
 
 export const taskStatuses: any = {
     'new': 'Передано специалисту',

@@ -12,19 +12,6 @@
         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-0">
       Выключить таймер
     </button>
-    <div v-if="hour || minute"
-         class="text-white text-1xl flex items-center"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-              clip-rule="evenodd"/>
-      </svg>
-      <div class="pl-3">
-        <span v-if="hour > 0">{{ hour }} ч.&nbsp;</span>
-        <span v-if="minute > 0">{{ minute }} мин.</span>
-      </div>
-    </div>
   </div>
 
 </template>
@@ -41,23 +28,17 @@ export default {
   data() {
     return {
       isStarted: false,
-      hour: 0,
-      minute: 0,
       timer: null,
     }
   },
   async mounted() {
     try {
-      const result = await axios.get(`/api/tasks/get-timer/`,{
+      const result = await axios.get(`/api/tasks/get-all-time/`,{
         params: {
           'id': this.taskId
         }
       })
-      this.currentTime = result.data.timer
-      this.hour = Math.floor(this.currentTime / 60)
-      this.min = this.currentTime % 60
-      console.log(result.data)
-      this.$emit('set-timer-value', this.timerField, this.currentTime)
+      this.$emit('set-timer-value', this.timerField, result.data.timer)
     } catch (error) {
       console.log(error)
     }
@@ -76,32 +57,19 @@ export default {
       const date = new Date()
 
       setTimeout( () => {
-        this.timer = setInterval(this.calcTime, 60000)
-        this.calcTime()
+        this.timer = setInterval(this.update, 60000)
       }, (60 - date.getSeconds()) * 1000)
-
-    },
-    calcTime() {
-      this.minute++
-      if (this.minute === 60) {
-        this.hour++;
-        this.minute = 0
-      }
-      this.currentTime = this.minute + (this.hour * 60)
-      this.update()
     },
     async update() {
       try {
-        await axios.post(`/api/tasks/update-timer/`, {
-          'id': this.taskId,
-          'timer': this.currentTime
+        const response = await axios.post(`/api/tasks/update-timer/`, {
+          'id': this.taskId
         })
-
-        this.$emit('set-timer-value', this.timerField, this.currentTime)
+        this.$emit('set-timer-value', this.timerField, response.data.timer)
       } catch (error) {
         console.log(error)
       }
-    }
+    },
   },
   beforeDestroy() {
     clearInterval(this.timer)
